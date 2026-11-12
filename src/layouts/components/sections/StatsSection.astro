@@ -1,0 +1,48 @@
+---
+import type { z } from "astro/zod";
+import config from ".astro/config.generated.json";
+import { getSectionContent } from "@/lib/contentParser.astro";
+import { getStats } from "@/lib/utils/siteData";
+import type { statsSectionSchema } from "@/sections.schema";
+import SectionHeader from "@/components/widgets/SectionHeader.astro";
+
+type StatsContent = NonNullable<z.infer<typeof statsSectionSchema>>;
+
+type Props = {
+  content?: StatsContent;
+};
+
+const { enable = true, title } = await getSectionContent<StatsContent>(
+  "stats-section",
+  Astro.props.content,
+  Astro.currentLocale,
+);
+
+// Values come from src/content/data/stats.yml
+const stats = await getStats();
+
+// Hidden until `showStats = true` in src/config/config.toml
+if (!enable || !config.settings.showStats) {
+  return null;
+}
+---
+
+<section id="stats">
+  <div class="bg-theme-darker text-light py-20 md:py-32">
+    <div class="container space-y-14">
+      <SectionHeader title={title} appearance="dark" />
+      <dl class="grid grid-cols-2 gap-10 text-center lg:grid-cols-4">
+        {
+          stats.map((stat) => (
+            <div class="flex flex-col-reverse gap-2">
+              <dt class="opacity-80">{stat.data.label}</dt>
+              <dd class="font-secondary text-accent text-display-6 font-bold">
+                {stat.data.value}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>

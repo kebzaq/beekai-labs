@@ -1,0 +1,51 @@
+---
+import type { z } from "astro/zod";
+import { getSectionContent } from "@/lib/contentParser.astro";
+import { markdownify } from "@/lib/utils/textConverter";
+import type { aboutSectionSchema } from "@/sections.schema";
+import SectionHeader from "@/components/widgets/SectionHeader.astro";
+
+type AboutContent = NonNullable<z.infer<typeof aboutSectionSchema>>;
+
+type Props = {
+  content?: AboutContent;
+};
+
+const {
+  enable = true,
+  title,
+  description,
+  mission,
+} = await getSectionContent<AboutContent>(
+  "about-section",
+  Astro.props.content,
+  Astro.currentLocale,
+);
+
+if (!enable) {
+  return null;
+}
+---
+
+<section id="about">
+  <div class="container">
+    <div class="grid grid-cols-1 gap-x-20 gap-y-12 lg:grid-cols-2">
+      <SectionHeader title={title} description={description} align="left" />
+      {
+        mission && (
+          <div class="bg-theme-darker text-light space-y-5 p-8 md:p-12">
+            {mission.title && (
+              <h2 class="text-h4-sm md:text-h4 text-accent">{mission.title}</h2>
+            )}
+            {mission.description && (
+              <p
+                class="text-lg"
+                set:html={markdownify(mission.description)}
+              />
+            )}
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>

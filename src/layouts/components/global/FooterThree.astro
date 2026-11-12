@@ -1,0 +1,134 @@
+---
+import config from ".astro/config.generated.json";
+import social from "@/config/social.json";
+import Logo from "@/components/global/Logo.astro";
+import SocialComponent from "@/components/widgets/Social.astro";
+import type { NavigationLink } from "@/types";
+import { markdownify } from "@/lib/utils/textConverter";
+import { filteredEnabled } from "@/lib/utils/filteredEnabled";
+import { splitProtectedText } from "@/lib/utils/splitProtectedText";
+import { getLocaleUrlCTM, useTranslations } from "@/lib/utils/i18nUtils";
+import { getIndustries, getServiceGroups } from "@/lib/utils/siteData";
+
+const t = await useTranslations(Astro.currentLocale as string);
+
+const {
+  copyright,
+  footerDescription,
+  contactInfo: { email, phone, serviceArea },
+} = config.settings;
+const { footerSpaceTop = true } = Astro.props;
+
+const description = footerDescription || t("footer.description") || "";
+const copyrightText = splitProtectedText(
+  copyright.text || t("footer.copyright") || "",
+).join(" / ");
+
+const serviceGroups = await getServiceGroups();
+const industries = await getIndustries();
+
+// Link columns: Services and Industries come from the data files, Company from the menu file
+const columns = [
+  {
+    title: t("footer.servicesTitle"),
+    links: serviceGroups.map((group) => ({
+      name: group.data.title,
+      url: `/services/#${group.id}`,
+    })),
+  },
+  {
+    title: t("footer.industriesTitle"),
+    links: industries.map((industry) => ({
+      name: industry.data.title,
+      url: `/industries/${industry.id}/`,
+    })),
+  },
+  {
+    title: t("footer.companyTitle"),
+    links: filteredEnabled(t("footerCompany") as NavigationLink[]),
+  },
+];
+
+const legalLinks = filteredEnabled(t("footerLegal") as NavigationLink[]);
+const socialLinks = social.main.filter((item) => item.enable);
+---
+
+<footer class:list={["text-light bg-black", !footerSpaceTop && "mt-0"]}>
+  <div class="container pb-8">
+    <div
+      class="grid grid-cols-1 gap-x-10 gap-y-12 border-b border-white/15 py-16 sm:grid-cols-2 md:py-20 lg:grid-cols-12">
+      <div class="space-y-6 sm:col-span-2 lg:col-span-4">
+        <Logo />
+        {
+          description && (
+            <p class="max-w-sm opacity-80" set:html={markdownify(description)} />
+          )
+        }
+        <ul
+          class="prose-a:hover:text-accent space-y-1 text-sm"
+          aria-label={t("footer.contactTitle")}>
+          {email && <li set:html={markdownify(email)} />}
+          {phone && <li set:html={markdownify(phone)} />}
+          {
+            serviceArea && (
+              <li>
+                <span class="sr-only">{t("footer.serviceAreaLabel")}: </span>
+                <span set:html={markdownify(serviceArea)} />
+              </li>
+            )
+          }
+        </ul>
+        {
+          socialLinks.length > 0 && (
+            <SocialComponent
+              size="lg"
+              layout="light"
+              class="gap-5"
+              linkType="follow"
+              list={socialLinks}
+            />
+          )
+        }
+      </div>
+
+      {
+        columns.map((column, index) => (
+          <nav
+            aria-label={column.title}
+            class:list={[index === 2 ? "lg:col-span-2" : "lg:col-span-3"]}>
+            <h2 class="text-h6 text-light mb-5">{column.title}</h2>
+            <ul class="space-y-3 text-sm">
+              {column.links.map((link) => (
+                <li>
+                  <a
+                    href={getLocaleUrlCTM(link.url || "/", Astro.currentLocale)}
+                    class="text-light/70 hover:text-accent">
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+    </div>
+
+    <div
+      class="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 pt-6 text-sm">
+      <p class="text-light/70" set:html={markdownify(copyrightText)} />
+      <ul class="flex flex-wrap gap-x-6 gap-y-2">
+        {
+          legalLinks.map((link) => (
+            <li>
+              <a
+                href={getLocaleUrlCTM(link.url || "/", Astro.currentLocale)}
+                class="text-light/70 hover:text-accent">
+                {link.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</footer>

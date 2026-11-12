@@ -1,0 +1,46 @@
+---
+import { markdownify } from "@/lib/utils/textConverter";
+
+interface Props {
+  title?: string;
+  description?: string;
+  appearance?: "light" | "dark";
+  align?: "center" | "left";
+  class?: string;
+}
+
+const {
+  title,
+  description,
+  appearance = "light",
+  align = "center",
+  class: className,
+} = Astro.props;
+
+const isCentered = align === "center";
+---
+
+{
+  (title || description) && (
+    <div
+      class:list={[
+        "space-y-5",
+        isCentered && "mx-auto max-w-3xl text-center",
+        className,
+      ]}>
+      {title && (
+        <h2
+          class:list={[
+            "section-title",
+            isCentered && "section-title-center",
+            appearance === "dark" && "text-light",
+          ]}
+          set:html={markdownify(title)}
+        />
+      )}
+      {description && (
+        <p class="text-lg opacity-80" set:html={markdownify(description)} />
+      )}
+    </div>
+  )
+}

@@ -1,0 +1,34 @@
+---
+import type { z } from "astro/zod";
+import { getSectionContent } from "@/lib/contentParser.astro";
+import type { faqSectionSchema } from "@/sections.schema";
+import FaqList from "@/components/widgets/FaqList.astro";
+import SectionHeader from "@/components/widgets/SectionHeader.astro";
+
+type FaqContent = NonNullable<z.infer<typeof faqSectionSchema>>;
+
+type Props = {
+  content?: FaqContent;
+  items: { question: string; answer: string }[];
+};
+
+const { enable = true, title, description } =
+  await getSectionContent<FaqContent>(
+    "faq-section",
+    Astro.props.content,
+    Astro.currentLocale,
+  );
+
+const { items } = Astro.props;
+
+if (!enable || items.length === 0) {
+  return null;
+}
+---
+
+<section id="faq">
+  <div class="container space-y-12">
+    <SectionHeader title={title} description={description} />
+    <FaqList items={items} class="mx-auto max-w-3xl" />
+  </div>
+</section>

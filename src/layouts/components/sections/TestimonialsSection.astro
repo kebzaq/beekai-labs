@@ -1,0 +1,53 @@
+---
+import type { z } from "astro/zod";
+import config from ".astro/config.generated.json";
+import { getSectionContent } from "@/lib/contentParser.astro";
+import type { testimonialsSectionSchema } from "@/sections.schema";
+import SectionHeader from "@/components/widgets/SectionHeader.astro";
+
+type TestimonialsContent = NonNullable<
+  z.infer<typeof testimonialsSectionSchema>
+>;
+
+type Props = {
+  content?: TestimonialsContent;
+};
+
+const {
+  enable = true,
+  title,
+  list = [],
+} = await getSectionContent<TestimonialsContent>(
+  "testimonials-section",
+  Astro.props.content,
+  Astro.currentLocale,
+);
+
+// Hidden until `showTestimonials = true` in src/config/config.toml and there is at least one real quote
+if (!enable || !config.settings.showTestimonials || list.length === 0) {
+  return null;
+}
+---
+
+<section id="testimonials">
+  <div class="container space-y-14">
+    <SectionHeader title={title} />
+    <ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {
+        list.map((item) => (
+          <li>
+            <figure class="bg-theme-light flex h-full flex-col gap-6 p-8">
+              <blockquote class="text-lg">{item.quote}</blockquote>
+              <figcaption class="mt-auto">
+                <span class="font-secondary text-dark block font-semibold">
+                  {item.name}
+                </span>
+                {item.role && <span class="text-sm">{item.role}</span>}
+              </figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

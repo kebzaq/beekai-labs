@@ -1,0 +1,139 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Icons from "@/helpers/Icons.astro";
+import { markdownify } from "@/lib/utils/textConverter";
+import { getIndustries } from "@/lib/utils/siteData";
+import { getLocaleUrlCTM, useTranslations } from "@/lib/utils/i18nUtils";
+import OptimizedImage from "@/components/utilities/OptimizedImage.astro";
+
+type Props = {
+  content: CollectionEntry<"portfolio">;
+  headingTag?: "h3" | "h4";
+  class?: string;
+};
+
+const { content, headingTag: Heading = "h3", class: className } = Astro.props;
+const { id, collection, data } = content;
+
+const t = await useTranslations(Astro.currentLocale as string);
+const slug = getLocaleUrlCTM(
+  data.customSlug || id,
+  Astro.currentLocale,
+  collection,
+);
+
+const industry = (await getIndustries()).find(
+  (item) => item.id === data.industry,
+);
+
+// Client and industry line (the client is skipped when it repeats the title)
+const meta = [data.client !== data.title && data.client, industry?.data.title]
+  .filter(Boolean)
+  .join(" · ");
+
+// Website projects show a screenshot in a browser frame, other projects an icon
+const isWebsite = data.categories.includes("websites") && !!data.coverImage;
+
+const statusClass = {
+  Live: "status-badge-live",
+  Concept: "status-badge-concept",
+  "In progress": "",
+}[data.status];
+
+const linkClass =
+  "font-secondary text-dark hover:text-accent-hover inline-flex items-center gap-2 text-sm uppercase";
+---
+
+<article
+  data-filter-item
+  data-categories={data.categories.join(" ")}
+  class:list={[
+    "border-border-light hover:border-accent flex h-full flex-col border bg-white transition duration-300",
+    className,
+  ]}>
+  {
+    isWebsite ? (
+      <div class="bg-theme-darker px-5 pt-5">
+        <div class="border border-b-0 border-white/15">
+          <div class="flex gap-1.5 bg-white/10 px-3 py-2.5" aria-hidden="true">
+            <span class="size-2 rounded-full bg-white/40" />
+            <span class="size-2 rounded-full bg-white/40" />
+            <span class="size-2 rounded-full bg-white/40" />
+          </div>
+          <OptimizedImage
+            src={data.coverImage as string}
+            alt={`${t("common.screenshotOf")} ${data.title}`}
+            width={720}
+            height={450}
+            loading="lazy"
+            class="aspect-video w-full object-cover object-top"
+          />
+        </div>
+      </div>
+    ) : (
+      <div class="bg-theme-darker relative flex aspect-video items-center justify-center overflow-hidden">
+        <div class="accent-glow -bottom-80" aria-hidden="true" />
+        <Icons
+          icon={(data.icon || "Sparkles") as any}
+          class="text-accent relative size-16"
+          aria-hidden="true"
+        />
+      </div>
+    )
+  }
+
+  <div class="flex grow flex-col gap-4 p-6">
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      {meta && <p class="text-sm opacity-80">{meta}</p>}
+      <span class:list={["status-badge", statusClass]}>{data.status}</span>
+    </div>
+
+    <Heading class="text-h5">
+      <a href={slug} class="hover:text-accent-hover">{data.title}</a>
+    </Heading>
+
+    {
+      isWebsite ? (
+        <p set:html={markdownify(data.summary)} />
+      ) : (
+        <dl class="space-y-3">
+          {[
+            { label: t("common.problemLabel"), value: data.challenge },
+            { label: t("common.solutionLabel"), value: data.solution },
+            { label: t("common.resultLabel"), value: data.results },
+          ].map((item) => (
+            <div>
+              <dt class="font-secondary text-dark text-sm font-semibold">
+                {item.label}
+              </dt>
+              <dd set:html={markdownify(item.value)} />
+            </div>
+          ))}
+        </dl>
+      )
+    }
+
+    <div class="mt-auto flex flex-wrap gap-x-6 gap-y-2 pt-2">
+      <a href={slug} class={linkClass}>
+        {t("common.viewCaseStudy")}
+        <span class="sr-only">: {data.title}</span>
+        <Icons icon="ArrowRight" class="size-4" aria-hidden="true" />
+      </a>
+      {
+        data.liveUrl && (
+          <a
+            href={data.liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class={linkClass}>
+            {t("common.visitWebsite")}
+            <span class="sr-only">
+              : {data.title} ({t("common.opensInNewTab")})
+            </span>
+            <Icons icon="ArrowUpRight" class="size-4" aria-hidden="true" />
+          </a>
+        )
+      }
+    </div>
+  </div>
+</article>

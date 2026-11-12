@@ -1,0 +1,74 @@
+---
+import Icons from "@/helpers/Icons.astro";
+import { markdownify } from "@/lib/utils/textConverter";
+import { getLocaleUrlCTM } from "@/lib/utils/i18nUtils";
+
+interface Props {
+  icon?: string;
+  title: string;
+  description?: string;
+  link?: { label: string; url: string };
+  badge?: string;
+  note?: string;
+  headingTag?: "h2" | "h3" | "h4";
+  appearance?: "light" | "dark";
+  class?: string;
+}
+
+const {
+  icon,
+  title,
+  description,
+  link,
+  badge,
+  note,
+  headingTag: Heading = "h3",
+  appearance = "light",
+  class: className,
+} = Astro.props;
+
+const isDark = appearance === "dark";
+---
+
+<div
+  class:list={[
+    "hover:border-accent flex h-full flex-col gap-4 border p-8 transition duration-300",
+    isDark ? "text-light border-white/15" : "border-border-light bg-white",
+    className,
+  ]}>
+  {
+    icon && (
+      <span
+        class:list={[
+          "bg-accent-soft inline-flex size-14 items-center justify-center",
+          isDark ? "text-accent-light" : "text-accent-hover",
+        ]}>
+        <Icons icon={icon as any} class="size-7" aria-hidden="true" />
+      </span>
+    )
+  }
+  {badge && <span class="status-badge self-start">{badge}</span>}
+  <Heading class:list={["text-h5", isDark && "text-light"]}>{title}</Heading>
+  {
+    description && (
+      <p class="opacity-80" set:html={markdownify(description)} />
+    )
+  }
+  {note && <p class="font-secondary text-dark text-sm font-semibold">{note}</p>}
+  {
+    link && (
+      <a
+        href={getLocaleUrlCTM(link.url, Astro.currentLocale)}
+        class:list={[
+          "font-secondary mt-auto inline-flex items-center gap-2 pt-2 text-sm uppercase",
+          isDark
+            ? "text-light hover:text-accent"
+            : "text-dark hover:text-accent-hover",
+        ]}>
+        {link.label}
+        <span class="sr-only">: {title}</span>
+        <Icons icon="ArrowRight" class="size-4" aria-hidden="true" />
+      </a>
+    )
+  }
+</div>

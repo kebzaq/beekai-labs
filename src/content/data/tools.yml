@@ -1,0 +1,20 @@
+# Tools we work with, shown as plain text in the homepage trust strip.
+# TODO: add icons if you want them. Do not add partner or certification badges unless confirmed.
+- id: astro
+  order: 1
+  name: Astro
+- id: react
+  order: 2
+  name: React
+- id: wix-studio
+  order: 3
+  name: Wix Studio
+- id: google-business-profile
+  order: 4
+  name: Google Business Profile
+- id: cloudflare
+  order: 5
+  name: Cloudflare
+- id: web3forms
+  order: 6
+  name: Web3Forms

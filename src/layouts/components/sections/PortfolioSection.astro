@@ -1,0 +1,112 @@
+---
+import type { z } from "astro/zod";
+import config from ".astro/config.generated.json";
+import { getCollectionCTM, getSectionContent } from "@/lib/contentParser.astro";
+import { getPortfolioCategories } from "@/lib/utils/siteData";
+import { useTranslations } from "@/lib/utils/i18nUtils";
+import type { portfolioSectionSchema } from "@/sections.schema";
+import CustomButton from "@/components/CustomButton.astro";
+import PortfolioCard from "@/components/cards/PortfolioCard.astro";
+import FilterTabs from "@/components/widgets/FilterTabs.astro";
+import SectionHeader from "@/components/widgets/SectionHeader.astro";
+
+type PortfolioContent = NonNullable<z.infer<typeof portfolioSectionSchema>>;
+
+type Props = {
+  content?: PortfolioContent;
+};
+
+const {
+  enable = true,
+  title,
+  description,
+  allLabel = "All",
+  options: { featuredOnly = false, limit = false, grouped = false } = {},
+  button,
+} = await getSectionContent<PortfolioContent>(
+  "portfolio-section",
+  Astro.props.content,
+  Astro.currentLocale,
+);
+
+const t = await useTranslations(Astro.currentLocale as string);
+
+let projects = await getCollectionCTM(
+  config.settings.portfolioFolder as "portfolio",
+  Astro.currentLocale,
+);
+
+if (featuredOnly) {
+  projects = projects.filter((project) => project.data.featured);
+}
+
+if (limit) {
+  projects = projects.slice(0, limit);
+}
+
+// Tabs come from src/content/data/portfolio-categories.yml. A tab without projects is hidden.
+const categories = (await getPortfolioCategories())
+  .map((category) => ({
+    id: category.id,
+    title: category.data.title,
+    projects: projects.filter((project) =>
+      project.data.categories.includes(category.id),
+    ),
+  }))
+  .filter((category) => category.projects.length > 0);
+
+const gridClass = "grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3";
+
+if (!enable) {
+  return null;
+}
+---
+
+<section id="projects">
+  <div class="container space-y-12">
+    <SectionHeader title={title} description={description} />
+
+    <div class="space-y-10" data-filter-root>
+      <FilterTabs
+        tabs={categories}
+        allLabel={allLabel}
+        label={t("common.filterProjects")}
+      />
+
+      {
+        grouped ? (
+          <div class="space-y-14">
+            {categories.map((category) => (
+              <div class="space-y-6" data-filter-group={category.id}>
+                <h3 class="text-h4-sm md:text-h4">{category.title}</h3>
+                <div class={gridClass}>
+                  {category.projects.map((project) => (
+                    <PortfolioCard content={project} headingTag="h4" />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div class={gridClass}>
+            {projects.map((project) => (
+              <PortfolioCard content={project} />
+            ))}
+          </div>
+        )
+      }
+    </div>
+
+    {
+      button?.enable && (
+        <div class="text-center">
+          <CustomButton
+            hoverEffect="creative-fill"
+            class="effect-color-accent"
+            {...button}
+          />
+        </div>
+      )
+    }
+  </div>
+</section>

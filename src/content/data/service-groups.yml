@@ -1,0 +1,95 @@
+# Service groups. This is the single source for the header Services dropdown,
+# the footer Services column, the homepage "What we do" cards and the /services page.
+# `id` is the URL anchor, for example /services/#ai-automation.
+# `faq` is shown on the detail page of every service in the group.
+# `icon` is a Lucide icon name (https://lucide.dev/icons), written in PascalCase.
+- id: web-design-development
+  order: 1
+  title: Web Design & Development
+  fullTitle: Web Design & Development
+  summary: Mobile-first websites that turn visitors into customers.
+  headline: Websites that look great and bring in customers
+  intro: Mobile-first websites built to turn visitors into calls, bookings and orders, and you own them, with no monthly platform lock-in.
+  icon: MonitorSmartphone
+  faq:
+    - question: "Will I own my website?"
+      answer: "Yes. You own your website, with no platform lock-in or surprise fees."
+    - question: "How long does a website take?"
+      answer: "Our website packages take about 2 to 6 weeks, depending on the size of the site. See the pricing page for each package."
+    - question: "Will it work on phones?"
+      answer: "Yes. Every site is built mobile-first and tested across devices and browsers before launch."
+- id: ai-automation
+  order: 2
+  title: AI & Automation
+  fullTitle: AI & Automation
+  summary: AI receptionists, chat assistants and automations that save you hours.
+  headline: Let AI handle the busywork
+  intro: Practical AI tools and automations that save you hours every week, so you can focus on your customers.
+  icon: Bot
+  faq:
+    - question: "Do I need technical skills?"
+      answer: "No. We set everything up and connect it to the tools you already use, and we can walk your team through it."
+    - question: "Will it work with the tools I already have?"
+      answer: "We connect forms, inboxes, calendars, booking systems and CRMs. Tell us what you use and we will confirm what is possible before any work starts."
+    - question: "Is AI a safe choice for my business?"
+      answer: "We focus on practical, responsible AI: tools that help, used safely. We explain what a tool does and does not do before you commit."
+- id: integrations-development
+  order: 3
+  title: Integrations & Development
+  fullTitle: Software Integration & Development
+  summary: Booking, payments, ordering and custom tools, all connected.
+  headline: All your tools, working together
+  intro: We connect the apps you already use, or build the ones you need.
+  icon: Plug
+  faq:
+    - question: "Which tools can you connect?"
+      answer: "Booking, payments, online ordering, email marketing, calendars and CRMs. Tell us what you use and we will confirm what is possible."
+    - question: "Do you test before launch?"
+      answer: "Yes. We test on mobile and across browsers, and check forms, links, speed and accessibility, with a written report."
+    - question: "What do you build custom tools with?"
+      answer: "Modern web technology such as React and TypeScript."
+- id: local-seo-growth
+  order: 4
+  title: Local SEO & Growth
+  fullTitle: Local SEO & Online Growth
+  summary: Get found on Google and Maps by customers near you.
+  headline: Get found by customers near you
+  intro: Show up on Google and Maps when local customers search for what you offer.
+  icon: MapPin
+  faq:
+    - question: "How quickly will I see results?"
+      answer: "Search results change gradually, and no one can guarantee a ranking. We focus on what helps local customers find you: an accurate Google profile, consistent listings and a site Google understands."
+    - question: "Do I need a website for local SEO?"
+      answer: "A Google Business Profile helps on its own, and a website gives customers a place to book, call or order. We can help with both."
+    - question: "Do you run ads or manage social media?"
+      answer: "Google Ads, Meta Ads and social media management are coming soon."
+- id: digital-consulting
+  order: 5
+  title: Digital Consulting
+  fullTitle: Digital Consulting
+  summary: Audits, strategy and AI readiness, with simple plans you can act on.
+  headline: Clear advice, practical plans
+  intro: Not sure where to start? We'll review what you have and give you a simple, prioritized plan.
+  icon: Compass
+  faq:
+    - question: "Is the audit really free?"
+      answer: "Yes. We review your website, Google profile and online presence, and show you what to fix first."
+    - question: "What do I get at the end?"
+      answer: "A simple, prioritized plan you can act on, matched to your budget."
+    - question: "Can you train my team?"
+      answer: "Yes. We offer training and walkthroughs so you can update your own website and use your new tools with confidence."
+- id: website-care-support
+  order: 6
+  title: Website Care & Support
+  fullTitle: Website Care & Support
+  summary: Updates, backups and support so your site keeps working.
+  headline: We keep it running, so you don't have to
+  intro: Ongoing support so your website stays fast, secure and up to date.
+  icon: LifeBuoy
+  faq:
+    - question: "What does a care plan cover?"
+      answer: "Uptime and form checks, backups, small edits and a monthly report. Care plans start from $50/mo."
+    - question: "Who pays for the domain and hosting?"
+      answer: "Domain, hosting and third-party subscriptions are paid by the client. We can set them up for you."
+    - question: "Can you make quick changes to my site?"
+      answer: "Yes. New photos, menu or price updates and seasonal promos, done fast."

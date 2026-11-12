@@ -1,0 +1,15 @@
+# Portfolio categories, used for the tabs on the homepage and the /portfolio page.
+# A tab is hidden automatically while no project uses its category.
+# Add or rename categories here, then use the `id` in a project's `categories` list.
+- id: websites
+  order: 1
+  title: Websites
+- id: automation
+  order: 2
+  title: Automation & Integrations
+- id: ai-tools
+  order: 3
+  title: AI Tools
+- id: consulting
+  order: 4
+  title: Consulting

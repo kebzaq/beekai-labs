@@ -1,0 +1,99 @@
+---
+import type { z } from "astro/zod";
+import Icons from "@/helpers/Icons.astro";
+import { getSectionContent } from "@/lib/contentParser.astro";
+import { getServiceGroups, getServices } from "@/lib/utils/siteData";
+import type { serviceGroupsSectionSchema } from "@/sections.schema";
+import FeatureCard from "@/components/cards/FeatureCard.astro";
+
+type ServiceGroupsContent = NonNullable<
+  z.infer<typeof serviceGroupsSectionSchema>
+>;
+
+type Props = {
+  content?: ServiceGroupsContent;
+};
+
+const {
+  enable = true,
+  jumpMenuLabel = "Jump to a service group",
+  learnMoreLabel = "Learn more",
+  comingSoonLabel = "Coming soon",
+} = await getSectionContent<ServiceGroupsContent>(
+  "service-groups-section",
+  Astro.props.content,
+  Astro.currentLocale,
+);
+
+// Groups and services come from src/content/data
+const services = await getServices();
+const groups = (await getServiceGroups()).map((group) => ({
+  ...group,
+  services: services.filter((service) => service.data.group === group.id),
+}));
+
+if (!enable) {
+  return null;
+}
+---
+
+<section id="service-groups">
+  <div class="container space-y-20 md:space-y-28">
+    <nav aria-label={jumpMenuLabel}>
+      <ul class="flex flex-wrap justify-center gap-3">
+        {
+          groups.map((group) => (
+            <li>
+              <a href={`#${group.id}`} class="filter-tab inline-block">
+                {group.data.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    {
+      groups.map((group) => (
+        <div id={group.id} class="scroll-mt-32 space-y-10">
+          <div class="flex max-w-3xl flex-col gap-5">
+            <p class="font-secondary text-accent-hover flex items-center gap-3 text-sm uppercase">
+              <Icons
+                icon={group.data.icon as any}
+                class="size-5"
+                aria-hidden="true"
+              />
+              <span>{group.data.fullTitle}</span>
+            </p>
+            <h2 class="section-title">{group.data.headline}</h2>
+            <p class="text-lg opacity-80">{group.data.intro}</p>
+          </div>
+          <ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {group.services.map((service) => {
+              const isAvailable = service.data.status === "available";
+              return (
+                <li>
+                  <FeatureCard
+                    title={service.data.title}
+                    description={service.data.summary}
+                    note={service.data.priceNote}
+                    badge={isAvailable ? undefined : comingSoonLabel}
+                    class={isAvailable ? "" : "bg-theme-light"}
+                    link={
+                      isAvailable
+                        ? {
+                            label: learnMoreLabel,
+                            url: `/services/${service.id}/`,
+                          }
+                        : undefined
+                    }
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</section>

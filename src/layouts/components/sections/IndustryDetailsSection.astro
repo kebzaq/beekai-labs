@@ -1,0 +1,86 @@
+---
+import type { z } from "astro/zod";
+import Icons from "@/helpers/Icons.astro";
+import { getSectionContent } from "@/lib/contentParser.astro";
+import { getIndustries } from "@/lib/utils/siteData";
+import { getLocaleUrlCTM } from "@/lib/utils/i18nUtils";
+import type { industryDetailsSectionSchema } from "@/sections.schema";
+import SectionHeader from "@/components/widgets/SectionHeader.astro";
+
+type IndustryDetailsContent = NonNullable<
+  z.infer<typeof industryDetailsSectionSchema>
+>;
+
+type Props = {
+  content?: IndustryDetailsContent;
+};
+
+const {
+  enable = true,
+  title,
+  description,
+  blockLinkLabel,
+} = await getSectionContent<IndustryDetailsContent>(
+  "industry-details-section",
+  Astro.props.content,
+  Astro.currentLocale,
+);
+
+// Bullet lists come from `solutions` in src/content/data/industries.yml
+const industries = await getIndustries();
+
+if (!enable) {
+  return null;
+}
+---
+
+<section id="industry-details">
+  <div class="container space-y-14">
+    <SectionHeader title={title} description={description} />
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      {
+        industries.map((industry) => (
+          <div class="bg-theme-light flex flex-col gap-6 p-8 md:p-10">
+            <div class="flex items-center gap-4">
+              <span class="bg-accent-soft text-accent-hover inline-flex size-14 shrink-0 items-center justify-center">
+                <Icons
+                  icon={industry.data.icon as any}
+                  class="size-7"
+                  aria-hidden="true"
+                />
+              </span>
+              <div>
+                <h3 class="text-h5">{industry.data.title}</h3>
+                <p class="text-sm opacity-80">{industry.data.audience}</p>
+              </div>
+            </div>
+            <ul class="space-y-3">
+              {industry.data.solutions.map((solution) => (
+                <li class="flex items-start gap-3">
+                  <Icons
+                    icon="Check"
+                    class="text-accent-hover mt-1 size-5 shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span>{solution}</span>
+                </li>
+              ))}
+            </ul>
+            {blockLinkLabel && (
+              <a
+                href={getLocaleUrlCTM(
+                  `/industries/${industry.id}/`,
+                  Astro.currentLocale,
+                )}
+                class="font-secondary text-dark hover:text-accent-hover mt-auto inline-flex items-center gap-2 text-sm uppercase">
+                {blockLinkLabel}
+                <span class="sr-only">: {industry.data.title}</span>
+                <Icons icon="ArrowRight" class="size-4" aria-hidden="true" />
+              </a>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

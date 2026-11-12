@@ -1,0 +1,29 @@
+---
+import Icons from "@/helpers/Icons.astro";
+import { markdownify } from "@/lib/utils/textConverter";
+
+interface Props {
+  items: { question: string; answer: string }[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+---
+
+<div class:list={["border-border-light border-t", className]}>
+  {
+    items.map((item) => (
+      <details class="group border-border-light border-b">
+        <summary class="font-secondary text-dark text-h6 flex cursor-pointer list-none items-center justify-between gap-6 py-5 font-semibold [&::-webkit-details-marker]:hidden">
+          {item.question}
+          <Icons
+            icon="ChevronDown"
+            class="size-5 shrink-0 transition duration-300 group-open:rotate-180"
+            aria-hidden="true"
+          />
+        </summary>
+        <div class="pb-6" set:html={markdownify(item.answer, true)} />
+      </details>
+    ))
+  }
+</div>

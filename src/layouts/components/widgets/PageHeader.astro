@@ -1,0 +1,42 @@
+---
+import { markdownify } from "@/lib/utils/textConverter";
+
+type Props = {
+  title?: string;
+  description?: string;
+  eyebrow?: string;
+};
+
+const { title, description, eyebrow } = Astro.props;
+---
+
+<section
+  class="text-light relative overflow-hidden bg-black pt-40 pb-16 md:pt-48 md:pb-24">
+  <div class="accent-glow -bottom-80" aria-hidden="true"></div>
+  <div class="relative container">
+    <div class="mx-auto max-w-4xl space-y-6 text-center">
+      {
+        eyebrow && (
+          <p class="font-secondary text-accent text-sm uppercase">{eyebrow}</p>
+        )
+      }
+      {
+        title && (
+          <h1
+            class="text-display-6 md:text-display-5 text-inherit"
+            set:html={markdownify(title)}
+          />
+        )
+      }
+      {
+        description && (
+          <p
+            class="mx-auto max-w-2xl text-lg opacity-80"
+            set:html={markdownify(description)}
+          />
+        )
+      }
+      <slot />
+    </div>
+  </div>
+</section>

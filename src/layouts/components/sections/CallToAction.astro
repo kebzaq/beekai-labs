@@ -1,0 +1,62 @@
+---
+import type { z } from "astro/zod";
+import { getSectionContent } from "@/lib/contentParser.astro";
+import { markdownify } from "@/lib/utils/textConverter";
+import type { ctaSectionSchema } from "@/sections.schema";
+import CustomButton from "@/components/CustomButton.astro";
+
+type CtaContent = NonNullable<z.infer<typeof ctaSectionSchema>>;
+
+type Props = {
+  content?: CtaContent;
+};
+
+const {
+  enable = true,
+  title,
+  description,
+  button,
+} = await getSectionContent<CtaContent>(
+  "call-to-action",
+  Astro.props.content,
+  Astro.currentLocale,
+);
+
+if (!enable) {
+  return null;
+}
+---
+
+<section class="cta-section">
+  <div
+    class="bg-theme-darker text-light relative overflow-hidden border-b border-white/15 py-20 md:py-28">
+    <div class="accent-glow -bottom-72" aria-hidden="true"></div>
+    <div class="relative container space-y-8 text-center">
+      {
+        title && (
+          <h2
+            class="text-light mx-auto max-w-3xl"
+            set:html={markdownify(title)}
+          />
+        )
+      }
+      {
+        description && (
+          <p
+            class="mx-auto max-w-2xl text-lg opacity-80"
+            set:html={markdownify(description)}
+          />
+        )
+      }
+      {
+        button?.enable && (
+          <CustomButton
+            hoverEffect="creative-fill"
+            class="btn-accent effect-color-light"
+            {...button}
+          />
+        )
+      }
+    </div>
+  </div>
+</section>

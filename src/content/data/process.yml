@@ -1,0 +1,21 @@
+# Process steps, shown on the homepage and on service detail pages.
+- id: discover
+  order: 1
+  title: Discover
+  description: We learn about your business, customers and goals.
+- id: preview-plan
+  order: 2
+  title: Free Preview & Plan
+  description: We show you a concept and a clear quote.
+- id: build
+  order: 3
+  title: Build
+  description: We design, build and connect your tools.
+- id: test-launch
+  order: 4
+  title: Test & Launch
+  description: Full QA, then go live.
+- id: care-grow
+  order: 5
+  title: Care & Grow
+  description: Ongoing support, SEO and new features as you grow.

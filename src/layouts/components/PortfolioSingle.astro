@@ -1,0 +1,230 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import { markdownify } from "@/lib/utils/textConverter";
+import { getLocaleUrlCTM, useTranslations } from "@/lib/utils/i18nUtils";
+import {
+  getIndustries,
+  getPortfolioCategories,
+  getServices,
+} from "@/lib/utils/siteData";
+import CustomButton from "./CustomButton.astro";
+import PageHeader from "./widgets/PageHeader.astro";
+import OptimizedImage from "./utilities/OptimizedImage.astro";
+import PaginationForSingle from "./widgets/PaginationForSingle.astro";
+
+type Props = {
+  content: CollectionEntry<"portfolio">;
+};
+
+const { content } = Astro.props;
+const { collection, data } = content;
+
+const t = await useTranslations(Astro.currentLocale as string);
+const { Content } = await render(content);
+
+const categoryTitles = (await getPortfolioCategories())
+  .filter((category) => data.categories.includes(category.id))
+  .map((category) => category.data.title);
+
+const industry = (await getIndustries()).find(
+  (item) => item.id === data.industry,
+);
+
+const services = (await getServices()).filter((service) =>
+  data.services.includes(service.id),
+);
+
+const statusClass = {
+  Live: "status-badge-live",
+  Concept: "status-badge-concept",
+  "In progress": "",
+}[data.status];
+
+const details = [
+  { label: t("common.challengeTitle"), value: data.challenge },
+  { label: t("common.solutionTitle"), value: data.solution },
+  { label: t("common.resultsTitle"), value: data.results },
+];
+---
+
+<PageHeader
+  eyebrow={categoryTitles.join(" · ")}
+  title={data.title}
+  description={data.summary}>
+  {
+    data.liveUrl && (
+      <CustomButton
+        label={t("common.viewLiveSite")}
+        url={data.liveUrl}
+        hoverEffect="creative-fill"
+        class="btn-accent effect-color-light"
+      />
+    )
+  }
+</PageHeader>
+
+{
+  data.coverImage && (
+    <section>
+      <div class="container">
+        <div class="bg-theme-darker flex flex-col items-end justify-center gap-8 p-6 md:flex-row md:p-10">
+          <div class="w-full border border-white/15 md:w-3/4">
+            <div
+              class="flex gap-1.5 bg-white/10 px-3 py-2.5"
+              aria-hidden="true">
+              <span class="size-2 rounded-full bg-white/40" />
+              <span class="size-2 rounded-full bg-white/40" />
+              <span class="size-2 rounded-full bg-white/40" />
+            </div>
+            <OptimizedImage
+              src={data.coverImage}
+              alt={`${t("common.desktopScreenshot")} ${data.title}`}
+              width={1440}
+              height={900}
+              loading="eager"
+              class="w-full"
+            />
+          </div>
+          {data.mobileImage && (
+            <div class="w-1/2 border-4 border-white/15 md:w-1/5">
+              <OptimizedImage
+                src={data.mobileImage}
+                alt={`${t("common.mobileScreenshot")} ${data.title}`}
+                width={390}
+                height={844}
+                loading="lazy"
+                class="w-full"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<section>
+  <div class="container">
+    <div class="grid grid-cols-1 gap-x-20 gap-y-12 lg:grid-cols-3">
+      <dl class="bg-theme-light h-fit space-y-5 p-8">
+        <div>
+          <dt class="text-sm opacity-80">{t("common.clientLabel")}</dt>
+          <dd class="font-secondary text-dark font-semibold">{data.client}</dd>
+        </div>
+        {
+          data.location && (
+            <div>
+              <dt class="text-sm opacity-80">{t("common.locationLabel")}</dt>
+              <dd class="font-secondary text-dark font-semibold">
+                {data.location}
+              </dd>
+            </div>
+          )
+        }
+        {
+          industry && (
+            <div>
+              <dt class="text-sm opacity-80">{t("common.industryLabel")}</dt>
+              <dd class="font-secondary text-dark font-semibold">
+                <a
+                  class="hover:text-accent-hover underline underline-offset-4"
+                  href={getLocaleUrlCTM(
+                    `/industries/${industry.id}/`,
+                    Astro.currentLocale,
+                  )}>
+                  {industry.data.title}
+                </a>
+              </dd>
+            </div>
+          )
+        }
+        {
+          services.length > 0 && (
+            <div>
+              <dt class="text-sm opacity-80">{t("common.servicesLabel")}</dt>
+              {services.map((service) => (
+                <dd class="font-secondary text-dark font-semibold">
+                  {service.data.status === "available" ? (
+                    <a
+                      class="hover:text-accent-hover underline underline-offset-4"
+                      href={getLocaleUrlCTM(
+                        `/services/${service.id}/`,
+                        Astro.currentLocale,
+                      )}>
+                      {service.data.title}
+                    </a>
+                  ) : (
+                    service.data.title
+                  )}
+                </dd>
+              ))}
+            </div>
+          )
+        }
+        <div>
+          <dt class="mb-1 text-sm opacity-80">{t("common.statusLabel")}</dt>
+          <dd>
+            <span class:list={["status-badge", statusClass]}>
+              {data.status}
+            </span>
+          </dd>
+        </div>
+      </dl>
+
+      <div class="space-y-10 lg:col-span-2">
+        {
+          details.map((item) => (
+            <div class="space-y-3">
+              <h2 class="text-h4-sm md:text-h4">{item.label}</h2>
+              <p class="text-lg" set:html={markdownify(item.value)} />
+            </div>
+          ))
+        }
+        {
+          content.body?.trim() && (
+            <div class="prose-styles">
+              <Content />
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+{
+  data.gallery.length > 0 && (
+    <section>
+      <div class="container space-y-8">
+        <h2 class="section-title text-h3-sm md:text-h3">
+          {t("common.galleryTitle")}
+        </h2>
+        <ul class="grid grid-cols-1 gap-6 md:grid-cols-2">
+          {data.gallery.map((image, index) => (
+            <li>
+              <OptimizedImage
+                src={image}
+                alt={`${data.title}, image ${index + 1}`}
+                loading="lazy"
+                class="w-full"
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+<section>
+  <div class="container">
+    <div class="border-border-light border-t pt-10">
+      <PaginationForSingle
+        prevBtnText={t("common.paginationPortfolioPrev")}
+        nextBtnText={t("common.paginationPortfolioNext")}
+        currentPage={content}
+        collection={collection}
+      />
+    </div>
+  </div>
+</section>

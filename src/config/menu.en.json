@@ -1,0 +1,69 @@
+{
+  "headerPrimary": [
+    {
+      "enable": true,
+      "name": "Services",
+      "url": "/services/",
+      "hasChildren": true,
+      "childrenFrom": "serviceGroups",
+      "childrenFromComment": "The dropdown items are generated from src/content/data/service-groups.yml",
+      "children": [],
+      "overviewLabel": "All Services",
+      "overviewLabelComment": "Label of the link to the Services page inside the mobile menu"
+    },
+    {
+      "enable": true,
+      "name": "Portfolio",
+      "url": "/portfolio/"
+    },
+    {
+      "enable": true,
+      "name": "About Us",
+      "url": "/about/"
+    },
+    {
+      "enable": true,
+      "name": "Blog",
+      "url": "/blog/"
+    }
+  ],
+  "footerCompany": [
+    {
+      "enable": true,
+      "name": "About Us",
+      "url": "/about/"
+    },
+    {
+      "enable": true,
+      "name": "Portfolio",
+      "url": "/portfolio/"
+    },
+    {
+      "enable": true,
+      "name": "Pricing",
+      "url": "/pricing/"
+    },
+    {
+      "enable": true,
+      "name": "Blog",
+      "url": "/blog/"
+    },
+    {
+      "enable": true,
+      "name": "Contact Us",
+      "url": "/contact/"
+    }
+  ],
+  "footerLegal": [
+    {
+      "enable": true,
+      "name": "Privacy Policy",
+      "url": "/privacy/"
+    },
+    {
+      "enable": true,
+      "name": "Terms",
+      "url": "/terms/"
+    }
+  ]
+}

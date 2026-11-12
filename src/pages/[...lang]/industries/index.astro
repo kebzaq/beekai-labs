@@ -1,0 +1,30 @@
+---
+import Base from "@/layouts/Base.astro";
+import { generatePaths } from "@/lib/utils/i18nUtils";
+import { getEntryCTM } from "@/lib/contentParser.astro";
+import overrideObjects from "@/lib/utils/overrideObjects.ts";
+import PageHeader from "@/components/widgets/PageHeader.astro";
+import IndustryDetailsSection from "@/components/sections/IndustryDetailsSection.astro";
+import ServicesSection from "@/components/sections/ServicesSection.astro";
+import CallToAction from "@/components/sections/CallToAction.astro";
+
+export function getStaticPaths() {
+  return generatePaths();
+}
+
+const page = await getEntryCTM("pages", "industries", Astro.currentLocale);
+const { title, description, industryDetailsSection, servicesSection, ctaSection } =
+  page.data;
+---
+
+<Base {...page.data} headerPosition="fixed" hasHeaderDarkBackground={true}>
+  <PageHeader title={title} description={description} />
+  <IndustryDetailsSection
+    content={overrideObjects(
+      { title: "", description: "" },
+      industryDetailsSection,
+    )}
+  />
+  <ServicesSection content={servicesSection} />
+  <CallToAction content={ctaSection} />
+</Base>

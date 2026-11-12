@@ -1,0 +1,38 @@
+---
+import type { z } from "astro/zod";
+import { getSectionContent } from "@/lib/contentParser.astro";
+import { getTools } from "@/lib/utils/siteData";
+import type { toolsSectionSchema } from "@/sections.schema";
+
+type ToolsContent = NonNullable<z.infer<typeof toolsSectionSchema>>;
+
+type Props = {
+  content?: ToolsContent;
+};
+
+const { enable = true, title } = await getSectionContent<ToolsContent>(
+  "tools-section",
+  Astro.props.content,
+  Astro.currentLocale,
+);
+
+// Tool names come from src/content/data/tools.yml
+const tools = await getTools();
+
+if (!enable || tools.length === 0) {
+  return null;
+}
+---
+
+<section id="tools">
+  <div class="container">
+    <div
+      class="border-border-light flex flex-col items-center gap-6 border-y py-8 lg:flex-row lg:justify-between lg:gap-10">
+      {title && <h2 class="text-h6 shrink-0">{title}</h2>}
+      <ul
+        class="font-secondary flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm uppercase">
+        {tools.map((tool) => <li>{tool.data.name}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,29 @@
+{
+  "main": [
+    {
+      "enable": false,
+      "label": "facebook",
+      "icon": "/images/icons/svg/facebook.svg",
+      "url": ""
+    },
+    {
+      "enable": false,
+      "label": "twitter",
+      "icon": "/images/icons/svg/twitter.svg",
+      "url": ""
+    },
+    {
+      "enable": false,
+      "label": "instagram",
+      "icon": "/images/icons/svg/instagram.svg",
+      "url": ""
+    },
+    {
+      "enable": false,
+      "label": "linkedin",
+      "icon": "/images/icons/svg/linkedin.svg",
+      "url": ""
+    }
+  ],
+  "_comment": "TODO: add real profile URLs and set enable to true. Disabled links are not shown anywhere on the site."
+}

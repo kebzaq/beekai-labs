@@ -1,0 +1,45 @@
+# Pricing. All prices, timelines and notes on the /pricing page come from this file.
+# Each top-level key is one block on the page.
+plans:
+  order: 1
+  title: Website packages
+  note: Domain, hosting and third-party subscriptions are paid by the client.
+  items:
+    - name: Starter Site
+      price: From $750
+      timeline: About 2 weeks
+      includes:
+        - "[TODO: list what is included in Starter Site]"
+    - name: Online Presence
+      price: From $1,500
+      timeline: About 3–4 weeks
+      popular: true
+      includes:
+        - "[TODO: list what is included in Online Presence]"
+    - name: Connected Business
+      price: From $2,500
+      timeline: About 4–6 weeks
+      includes:
+        - "[TODO: list what is included in Connected Business]"
+care-plans:
+  order: 2
+  title: Care Plans
+  items:
+    - name: Basic
+      price: From $50/mo
+      includes:
+        - "[TODO: list what is included in the Basic care plan]"
+    - name: Plus
+      price: From $125/mo
+      includes:
+        - "[TODO: list what is included in the Plus care plan]"
+add-ons:
+  order: 3
+  title: Add-ons
+  items:
+    - name: Extra page
+      price: From $100
+    - name: Rush delivery
+      price: +25%
+    - name: Extra revision
+      price: $100

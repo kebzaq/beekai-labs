@@ -1,0 +1,77 @@
+# Industries. This is the single source for the footer Industries column, the homepage
+# industry cards and detail blocks, the /industries pages and the contact form dropdown.
+#   id:        URL slug, for example /industries/beauty-wellness/
+#   icon:      Lucide icon name (https://lucide.dev/icons), written in PascalCase
+#   benefit:   one-line benefit shown on the homepage card
+#   problems:  common problems, shown on the industry page
+#   solutions: 4–6 tailored services, shown on the homepage block and the industry page
+- id: beauty-wellness
+  order: 1
+  title: Beauty & Wellness
+  audience: Salons, spas and barbers
+  icon: Scissors
+  benefit: Fill your calendar with online booking that works around the clock.
+  problems:
+    - Clients can only book by calling or sending a message
+    - Services and prices are scattered across Instagram, Facebook and Yelp
+    - Calls go unanswered while you are with a client
+    - Online listings show different hours and details
+  solutions:
+    - Online booking with automatic confirmations and reminders
+    - Service menu with prices and a photo gallery
+    - Google and Yelp profile cleanup
+    - Automatic review requests after each visit
+    - AI phone booking assistant for calls you can't answer
+- id: cafes-restaurants
+  order: 2
+  title: Cafés & Restaurants
+  audience: Cafés, coffee shops and restaurants
+  icon: Coffee
+  benefit: Put your menu, hours and events where hungry customers can find them.
+  problems:
+    - The menu only exists as a photo or a social media post
+    - Hours and location differ between Google, Yelp and Facebook
+    - Events and specials are hard to find
+    - Orders can only be placed by phone or in person
+  solutions:
+    - Photo menu that is easy to update
+    - Online ordering with pickup and delivery options
+    - Events and specials page
+    - Google Business Profile and Maps listing cleanup
+    - Click-to-call, hours and directions on every page
+- id: home-services
+  order: 3
+  title: Home Services
+  audience: HVAC, cleaning and contractors
+  icon: Wrench
+  benefit: Turn local searches into service calls with click-to-call and request forms.
+  problems:
+    - Customers can't tell which areas you serve
+    - Calls are missed while you are on a job
+    - There is no quick way to request service or a quote online
+    - Licensing and insurance details are hard to find
+  solutions:
+    - Click-to-call and request-service forms
+    - Service area section with a map
+    - Licensing and trust section
+    - Emergency call-to-action for urgent jobs
+    - Local SEO and Google Business Profile setup
+    - Automatic follow-ups and review requests
+- id: nonprofits-government
+  order: 4
+  title: Nonprofits & Government
+  audience: Nonprofits and public organizations
+  icon: Landmark
+  benefit: Share your mission clearly with an accessible website your team can update.
+  problems:
+    - The website is outdated and hard for staff to update
+    - Programs, events and key information are hard to find
+    - Donation and volunteer sign-ups are handled by hand
+    - Accessibility requirements are not being met
+  solutions:
+    - Programs and events pages
+    - Donation and volunteer forms
+    - Accessibility-focused design (WCAG)
+    - Form and email automation
+    - QA testing with a written report
+    - Training so your team can update the site

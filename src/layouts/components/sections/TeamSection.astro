@@ -1,0 +1,67 @@
+---
+import type { z } from "astro/zod";
+import Icons from "@/helpers/Icons.astro";
+import { getSectionContent } from "@/lib/contentParser.astro";
+import { markdownify } from "@/lib/utils/textConverter";
+import type { teamSectionSchema } from "@/sections.schema";
+import SectionHeader from "@/components/widgets/SectionHeader.astro";
+import OptimizedImage from "@/components/utilities/OptimizedImage.astro";
+
+type TeamContent = NonNullable<z.infer<typeof teamSectionSchema>>;
+
+type Props = {
+  content?: TeamContent;
+};
+
+const {
+  enable = true,
+  title,
+  description,
+  list = [],
+} = await getSectionContent<TeamContent>(
+  "team-section",
+  Astro.props.content,
+  Astro.currentLocale,
+);
+
+if (!enable || list.length === 0) {
+  return null;
+}
+---
+
+<section id="team">
+  <div class="container space-y-14">
+    <SectionHeader title={title} description={description} />
+    <ul class="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-2">
+      {
+        list.map((member) => (
+          <li class="border-border-light flex h-full flex-col border bg-white">
+            {member.image ? (
+              <OptimizedImage
+                src={member.image}
+                alt={member.name}
+                width={640}
+                height={480}
+                loading="lazy"
+                class="aspect-4/3 w-full object-cover"
+              />
+            ) : (
+              <div class="bg-theme-darker text-accent flex aspect-4/3 items-center justify-center">
+                <Icons icon="UserRound" class="size-16" aria-hidden="true" />
+              </div>
+            )}
+            <div class="space-y-3 p-6">
+              <h3 class="text-h5">{member.name}</h3>
+              {member.role && (
+                <p class="font-secondary text-accent-hover text-sm uppercase">
+                  {member.role}
+                </p>
+              )}
+              {member.bio && <p set:html={markdownify(member.bio)} />}
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

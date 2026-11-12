@@ -1,0 +1,58 @@
+---
+import type { z } from "astro/zod";
+import { getSectionContent } from "@/lib/contentParser.astro";
+import { getServiceGroups } from "@/lib/utils/siteData";
+import type { servicesSectionSchema } from "@/sections.schema";
+import FeatureCard from "@/components/cards/FeatureCard.astro";
+import SectionHeader from "@/components/widgets/SectionHeader.astro";
+
+type ServicesContent = NonNullable<z.infer<typeof servicesSectionSchema>>;
+
+type Props = {
+  content?: ServicesContent;
+};
+
+const {
+  enable = true,
+  title,
+  description,
+  cardLinkLabel,
+} = await getSectionContent<ServicesContent>(
+  "services-section",
+  Astro.props.content,
+  Astro.currentLocale,
+);
+
+// Cards come from src/content/data/service-groups.yml
+const groups = await getServiceGroups();
+
+if (!enable) {
+  return null;
+}
+---
+
+<section id="services">
+  <div class="bg-theme-light py-20 md:py-32">
+    <div class="container space-y-14">
+      <SectionHeader title={title} description={description} />
+      <ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {
+          groups.map((group, index) => (
+            <li data-aos="fade-up" data-aos-delay={(index % 3) * 100}>
+              <FeatureCard
+                icon={group.data.icon}
+                title={group.data.title}
+                description={group.data.summary}
+                link={
+                  cardLinkLabel
+                    ? { label: cardLinkLabel, url: `/services/#${group.id}` }
+                    : undefined
+                }
+              />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

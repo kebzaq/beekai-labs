@@ -1,0 +1,73 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Icons from "@/helpers/Icons.astro";
+import { formatPostDate, tagId } from "@/lib/utils/blogUtils";
+import { getLocaleUrlCTM, useTranslations } from "@/lib/utils/i18nUtils";
+import OptimizedImage from "@/components/utilities/OptimizedImage.astro";
+
+type Props = {
+  content: CollectionEntry<"blog">;
+  headingTag?: "h2" | "h3";
+  class?: string;
+};
+
+const { content, headingTag: Heading = "h2", class: className } = Astro.props;
+const { id, collection, data } = content;
+
+const t = await useTranslations(Astro.currentLocale as string);
+const slug = getLocaleUrlCTM(
+  data.customSlug || id,
+  Astro.currentLocale,
+  collection,
+);
+---
+
+<article
+  data-filter-item
+  data-categories={data.tags.map(tagId).join(" ")}
+  class:list={[
+    "border-border-light hover:border-accent flex h-full flex-col border bg-white transition duration-300",
+    className,
+  ]}>
+  {
+    data.coverImage ? (
+      <OptimizedImage
+        src={data.coverImage}
+        alt=""
+        width={720}
+        height={405}
+        loading="lazy"
+        class="aspect-video w-full object-cover"
+      />
+    ) : (
+      <div class="bg-theme-darker text-accent flex aspect-video items-center justify-center">
+        <Icons icon="FileText" class="size-12" aria-hidden="true" />
+      </div>
+    )
+  }
+  <div class="flex grow flex-col gap-4 p-6">
+    <div class="flex flex-wrap items-center justify-between gap-2 text-sm">
+      <time datetime={data.date.toISOString()}>
+        {formatPostDate(data.date)}
+      </time>
+      {
+        data.draft && (
+          <span class="status-badge">{t("common.draftLabel")}</span>
+        )
+      }
+    </div>
+    <Heading class="text-h5">
+      <a href={slug} class="hover:text-accent-hover">{data.title}</a>
+    </Heading>
+    <p>{data.description}</p>
+    {
+      data.tags.length > 0 && (
+        <ul class="font-secondary mt-auto flex flex-wrap gap-x-4 gap-y-1 pt-2 text-xs uppercase">
+          {data.tags.map((tag) => (
+            <li>{tag}</li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</article>

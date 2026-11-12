@@ -1,0 +1,72 @@
+---
+import type { z } from "astro/zod";
+import { getSectionContent } from "@/lib/contentParser.astro";
+import { getIndustries } from "@/lib/utils/siteData";
+import type { industriesSectionSchema } from "@/sections.schema";
+import CustomButton from "@/components/CustomButton.astro";
+import FeatureCard from "@/components/cards/FeatureCard.astro";
+import SectionHeader from "@/components/widgets/SectionHeader.astro";
+
+type IndustriesContent = NonNullable<z.infer<typeof industriesSectionSchema>>;
+
+type Props = {
+  content?: IndustriesContent;
+};
+
+const {
+  enable = true,
+  title,
+  description,
+  cardLinkLabel,
+  button,
+} = await getSectionContent<IndustriesContent>(
+  "industries-section",
+  Astro.props.content,
+  Astro.currentLocale,
+);
+
+// Cards come from src/content/data/industries.yml
+const industries = await getIndustries();
+
+if (!enable) {
+  return null;
+}
+---
+
+<section id="industries">
+  <div class="container space-y-14">
+    <SectionHeader title={title} description={description} />
+    <ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+      {
+        industries.map((industry, index) => (
+          <li data-aos="fade-up" data-aos-delay={index * 100}>
+            <FeatureCard
+              icon={industry.data.icon}
+              title={industry.data.title}
+              description={industry.data.benefit}
+              link={
+                cardLinkLabel
+                  ? {
+                      label: cardLinkLabel,
+                      url: `/industries/${industry.id}/`,
+                    }
+                  : undefined
+              }
+            />
+          </li>
+        ))
+      }
+    </ul>
+    {
+      button?.enable && (
+        <div class="text-center">
+          <CustomButton
+            hoverEffect="creative-fill"
+            class="effect-color-accent"
+            {...button}
+          />
+        </div>
+      )
+    }
+  </div>
+</section>

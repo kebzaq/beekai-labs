@@ -1,0 +1,58 @@
+---
+import type { z } from "astro/zod";
+import { getSectionContent } from "@/lib/contentParser.astro";
+import { getWhyUsItems } from "@/lib/utils/siteData";
+import type { whyUsSectionSchema } from "@/sections.schema";
+import FeatureCard from "@/components/cards/FeatureCard.astro";
+import SectionHeader from "@/components/widgets/SectionHeader.astro";
+
+type WhyUsContent = NonNullable<z.infer<typeof whyUsSectionSchema>>;
+
+type Props = {
+  content?: WhyUsContent;
+};
+
+const {
+  enable = true,
+  title,
+  description,
+} = await getSectionContent<WhyUsContent>(
+  "why-us-section",
+  Astro.props.content,
+  Astro.currentLocale,
+);
+
+// Items come from src/content/data/why-us.yml
+const items = await getWhyUsItems();
+
+if (!enable) {
+  return null;
+}
+---
+
+<section id="why-us">
+  <div class="bg-theme-darker relative overflow-hidden py-20 md:py-32">
+    <div class="accent-glow -top-72" aria-hidden="true"></div>
+    <div class="relative container space-y-14">
+      <SectionHeader
+        title={title}
+        description={description}
+        appearance="dark"
+      />
+      <ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+        {
+          items.map((item) => (
+            <li>
+              <FeatureCard
+                appearance="dark"
+                icon={item.data.icon}
+                title={item.data.title}
+                description={item.data.description}
+              />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

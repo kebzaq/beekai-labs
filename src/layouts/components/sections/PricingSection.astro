@@ -1,0 +1,88 @@
+---
+import type { z } from "astro/zod";
+import { getSectionContent } from "@/lib/contentParser.astro";
+import { getPricingBlocks } from "@/lib/utils/siteData";
+import { useTranslations } from "@/lib/utils/i18nUtils";
+import type { pricingSectionSchema } from "@/sections.schema";
+import PricingCard from "@/components/cards/PricingCard.astro";
+import SectionHeader from "@/components/widgets/SectionHeader.astro";
+
+type PricingContent = NonNullable<z.infer<typeof pricingSectionSchema>>;
+
+type Props = {
+  content?: PricingContent;
+};
+
+const {
+  enable = true,
+  title,
+  description,
+  popularLabel,
+  button,
+} = await getSectionContent<PricingContent>(
+  "pricing-section",
+  Astro.props.content,
+  Astro.currentLocale,
+);
+
+const t = await useTranslations(Astro.currentLocale as string);
+
+// Prices, timelines and notes come from src/content/data/pricing.yml
+const blocks = await getPricingBlocks();
+
+if (!enable) {
+  return null;
+}
+---
+
+<section id="pricing">
+  <div class="container space-y-20">
+    <SectionHeader title={title} description={description} />
+    {
+      blocks.map((block) => {
+        // Blocks without "what's included" lists (add-ons) are shown as a simple table
+        const isTable = block.data.items.every((item) => !item.includes);
+        return (
+          <div id={block.id} class="space-y-8">
+            <h2 class="section-title text-h3-sm md:text-h3">
+              {block.data.title}
+            </h2>
+            {isTable ? (
+              <table class="w-full max-w-2xl text-start">
+                <thead class="sr-only">
+                  <tr>
+                    <th scope="col">{t("common.addOnLabel")}</th>
+                    <th scope="col">{t("common.priceLabel")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {block.data.items.map((item) => (
+                    <tr class="border-border-light border-b">
+                      <th scope="row" class="py-4 text-start font-normal">
+                        {item.name}
+                      </th>
+                      <td class="font-secondary text-dark py-4 text-end font-semibold">
+                        {item.price}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {block.data.items.map((item) => (
+                  <PricingCard
+                    content={item}
+                    popularLabel={popularLabel}
+                    button={button}
+                  />
+                ))}
+              </div>
+            )}
+            {block.data.note && <p class="text-sm">{block.data.note}</p>}
+          </div>
+        );
+      })
+    }
+  </div>
+</section>

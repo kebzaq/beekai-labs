@@ -1,0 +1,18 @@
+# "By the numbers" on the homepage. Hidden while `showStats = false` in src/config/config.toml.
+# TODO: replace every value with a real number before turning the section on.
+- id: stat-1
+  order: 1
+  value: "[TODO]"
+  label: "[TODO: for example, projects delivered]"
+- id: stat-2
+  order: 2
+  value: "[TODO]"
+  label: "[TODO: for example, average launch time]"
+- id: stat-3
+  order: 3
+  value: "[TODO]"
+  label: "[TODO: for example, industries served]"
+- id: stat-4
+  order: 4
+  value: "[TODO]"
+  label: "[TODO: for example, hours saved for clients]"

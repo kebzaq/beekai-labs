@@ -1,0 +1,80 @@
+---
+import Icons from "@/helpers/Icons.astro";
+import { markdownify } from "@/lib/utils/textConverter";
+import CustomButton from "@/components/CustomButton.astro";
+
+type Props = {
+  content: {
+    name: string;
+    price: string;
+    timeline?: string;
+    popular?: boolean;
+    includes?: string[];
+  };
+  popularLabel?: string;
+  button?: Record<string, any>;
+  class?: string;
+};
+
+const { content, popularLabel, button, class: className } = Astro.props;
+const { name, price, timeline, popular, includes } = content;
+---
+
+<div
+  class:list={[
+    "bg-theme-light flex h-full flex-col gap-8 border p-8",
+    popular ? "border-accent" : "border-transparent",
+    className,
+  ]}>
+  <div class="space-y-3">
+    {
+      popular && popularLabel && (
+        <span class="status-badge status-badge-live">{popularLabel}</span>
+      )
+    }
+    <h3 class="text-h5">{name}</h3>
+    <p class="font-secondary text-dark text-h4-sm md:text-h4 font-semibold">
+      {price}
+    </p>
+    {
+      timeline && (
+        <p class="flex items-center gap-2 text-sm">
+          <Icons
+            icon="Clock"
+            class="text-accent-hover size-4 shrink-0"
+            aria-hidden="true"
+          />
+          <span>{timeline}</span>
+        </p>
+      )
+    }
+  </div>
+  {
+    includes && includes.length > 0 && (
+      <ul class="space-y-3">
+        {includes.map((item) => (
+          <li class="flex items-start gap-3">
+            <Icons
+              icon="Check"
+              class="text-accent-hover mt-1 size-5 shrink-0"
+              aria-hidden="true"
+            />
+            <span set:html={markdownify(item)} />
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  {
+    button?.enable && button.label && (
+      <CustomButton
+        hoverEffect="creative-fill"
+        {...(button as any)}
+        class:list={[
+          "mt-auto text-center",
+          popular ? "btn-accent effect-color-dark" : "effect-color-accent",
+        ]}
+      />
+    )
+  }
+</div>

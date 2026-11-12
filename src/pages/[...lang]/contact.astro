@@ -1,0 +1,19 @@
+---
+import Base from "@/layouts/Base.astro";
+import { generatePaths } from "@/lib/utils/i18nUtils";
+import { getEntryCTM } from "@/lib/contentParser.astro";
+import PageHeader from "@/components/widgets/PageHeader.astro";
+import ContactSection from "@/components/sections/ContactSection.astro";
+
+export function getStaticPaths() {
+  return generatePaths();
+}
+
+const page = await getEntryCTM("pages", "contact", Astro.currentLocale);
+const { title, description, contactSection } = page.data;
+---
+
+<Base {...page.data} headerPosition="fixed" hasHeaderDarkBackground={true}>
+  <PageHeader title={title} description={description} />
+  <ContactSection content={contactSection} />
+</Base>

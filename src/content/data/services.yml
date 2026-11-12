@@ -1,0 +1,259 @@
+# Services. One entry per service; this is the single source for the /services page,
+# the service detail pages and the "service interested in" dropdown on the contact form.
+#   id:       URL slug of the detail page, for example /services/business-websites/
+#   order:    position in lists (lower numbers first)
+#   group:    id of a group in service-groups.yml
+#   summary:  one-line card text
+#   includes: "What's included" bullets for the detail page (may be empty)
+#   status:   "available" or "coming-soon". Coming-soon services show a badge and have no detail page.
+#   whoFor:   "Who it's for" text on the detail page
+#   priceNote: optional short price line shown on the card
+
+# ---------- Web Design & Development ----------
+- id: business-websites
+  order: 1
+  group: web-design-development
+  title: Business Websites
+  summary: A fast, modern site that tells your story and makes it easy to contact you.
+  includes:
+    - Up to 5–8 pages, custom design matched to your brand
+    - Click-to-call, maps, contact forms
+    - Mobile-first, tested on every device
+  whoFor: Local businesses that need a clear, professional home online and an easy way for customers to get in touch.
+  status: available
+- id: website-redesign
+  order: 2
+  group: web-design-development
+  title: Website Redesign
+  summary: Turn an outdated or confusing site into one customers enjoy using.
+  includes:
+    - UX review of your current site, fixing broken links and confusing navigation
+    - New design, content cleanup, faster load times
+  whoFor: Businesses and organizations whose current site is outdated, slow or hard to use.
+  status: available
+- id: booking-appointment-websites
+  order: 3
+  group: web-design-development
+  title: Booking & Appointment Websites
+  summary: Let clients book 24/7 without calling. Great for salons, spas, barbers and clinics.
+  includes:
+    - Online booking, service menu with prices, photo gallery
+    - Automatic confirmations and reminders
+  whoFor: Salons, spas, barbers, clinics and other appointment-based businesses.
+  status: available
+- id: ecommerce-online-ordering
+  order: 4
+  group: web-design-development
+  title: E-commerce & Online Ordering
+  summary: Sell products or take orders online. Great for cafés, boutiques and local makers.
+  includes:
+    - Product or menu catalog with photos, online payments
+    - Pickup and delivery options, order notifications
+  whoFor: Cafés, boutiques and local makers who want to sell products or take orders online.
+  status: available
+- id: nonprofit-organization-websites
+  order: 5
+  group: web-design-development
+  title: Nonprofit & Organization Websites
+  summary: Share your mission, recruit volunteers and accept donations.
+  includes:
+    - Programs, events, donation and volunteer forms
+    - Accessibility-focused (WCAG)
+  whoFor: Nonprofits and community organizations that need to share their mission, recruit volunteers and accept donations.
+  status: available
+- id: landing-pages
+  order: 6
+  group: web-design-development
+  title: Landing Pages
+  summary: One focused page for a campaign, event or new service.
+  includes: []
+  whoFor: Anyone promoting a single campaign, event or new service.
+  status: available
+
+# ---------- AI & Automation ----------
+- id: ai-phone-receptionist-booking
+  order: 7
+  group: ai-automation
+  title: AI Phone Receptionist & Booking
+  summary: Never miss a call. An AI assistant answers 24/7, books appointments and texts customers a booking link.
+  includes:
+    - Dedicated phone number, synced with your calendar or booking system
+    - Text-message fallback, call summaries sent to your inbox
+  whoFor: Appointment-based businesses that miss calls while they are with customers or after hours.
+  status: available
+- id: ai-chat-assistant
+  order: 8
+  group: ai-automation
+  title: AI Chat Assistant
+  summary: A website chat that answers common questions (hours, prices, services) and captures leads.
+  includes: []
+  whoFor: Businesses that answer the same questions about hours, prices and services again and again.
+  status: available
+- id: workflow-automation
+  order: 9
+  group: ai-automation
+  title: Workflow Automation
+  summary: Connect your forms, inbox, calendar and CRM so tasks happen automatically.
+  includes:
+    - Form submissions sent to email/CRM, auto-replies, lead follow-ups
+    - Appointment reminders to reduce no-shows
+  whoFor: Small teams that copy information between forms, inboxes, calendars and a CRM by hand.
+  status: available
+- id: review-reputation-automation
+  order: 10
+  group: ai-automation
+  title: Review & Reputation Automation
+  summary: Automatically ask happy customers for Google reviews after each visit.
+  includes: []
+  whoFor: Local businesses that want more Google reviews without asking each customer in person.
+  status: available
+- id: custom-ai-tools
+  order: 11
+  group: ai-automation
+  title: Custom AI Tools
+  summary: AI-powered tools built around your business, such as content generators, quote calculators and internal assistants.
+  includes: []
+  status: coming-soon
+
+# ---------- Software Integration & Development ----------
+- id: app-tool-integrations
+  order: 12
+  group: integrations-development
+  title: App & Tool Integrations
+  summary: Booking, payments, online ordering, email marketing, calendars and CRMs connected to your website.
+  includes: []
+  whoFor: Businesses whose booking, payment, ordering or email tools don't talk to their website yet.
+  status: available
+- id: custom-web-applications
+  order: 13
+  group: integrations-development
+  title: Custom Web Applications
+  summary: Dashboards, client portals, forms and internal tools built with modern tech (React, TypeScript).
+  includes: []
+  whoFor: Teams that need a dashboard, client portal, form or internal tool that off-the-shelf software doesn't cover.
+  status: available
+- id: qa-website-testing
+  order: 14
+  group: integrations-development
+  title: QA & Website Testing
+  summary: Professional testing before launch, covering mobile, browsers, forms, links, speed and accessibility, with a written report.
+  includes: []
+  whoFor: Business owners and teams who want an independent check of a website before it goes live.
+  status: available
+- id: mobile-app-development
+  order: 15
+  group: integrations-development
+  title: Mobile App Development
+  summary: iOS and Android apps for your business.
+  includes: []
+  status: coming-soon
+
+# ---------- Local SEO & Online Growth ----------
+- id: local-seo-google-business-profile
+  order: 16
+  group: local-seo-growth
+  title: Local SEO & Google Business Profile
+  summary: Optimize your Google profile and Maps listing so locals find you first.
+  includes:
+    - Profile setup and cleanup, photos, categories, hours
+    - Consistent info across Google, Yelp, Facebook and Apple Maps
+  whoFor: Local businesses that want to show up on Google and Maps when nearby customers search.
+  status: available
+- id: on-page-seo
+  order: 17
+  group: local-seo-growth
+  title: On-Page SEO
+  summary: Page titles, descriptions, speed, sitemap and structured data so Google understands your site.
+  includes: []
+  whoFor: Website owners who want Google to understand their pages and show them for the right searches.
+  status: available
+- id: content-blog
+  order: 18
+  group: local-seo-growth
+  title: Content & Blog
+  summary: Helpful articles that answer your customers' questions and build trust.
+  includes: []
+  whoFor: Businesses that want to answer customer questions and build trust with helpful articles.
+  status: available
+- id: google-meta-ads
+  order: 19
+  group: local-seo-growth
+  title: Google Ads & Meta (Facebook/Instagram) Ads
+  summary: Targeted ad campaigns with clear monthly reporting.
+  includes: []
+  status: coming-soon
+- id: social-media-management
+  order: 20
+  group: local-seo-growth
+  title: Social Media Management
+  summary: Consistent posts and branded graphics for Instagram and Facebook.
+  includes: []
+  status: coming-soon
+
+# ---------- Digital Consulting ----------
+- id: free-website-digital-audit
+  order: 21
+  group: digital-consulting
+  title: Free Website & Digital Audit
+  summary: We review your website, Google profile and online presence, and show you what to fix first.
+  includes: []
+  whoFor: Anyone who is not sure where their website or online presence stands and what to fix first.
+  status: available
+- id: digital-strategy-roadmap
+  order: 22
+  group: digital-consulting
+  title: Digital Strategy & Roadmap
+  summary: A step-by-step plan for your website, tools and marketing, matched to your budget.
+  includes: []
+  whoFor: Owners and teams who want a step-by-step plan for their website, tools and marketing that fits their budget.
+  status: available
+- id: ai-readiness-consulting
+  order: 23
+  group: digital-consulting
+  title: AI Readiness Consulting
+  summary: Find out where AI can save your team time, and how to use it safely and responsibly.
+  includes: []
+  whoFor: Teams curious about where AI can save time and how to use it safely and responsibly.
+  status: available
+- id: training-walkthroughs
+  order: 24
+  group: digital-consulting
+  title: Training & Walkthroughs
+  summary: Learn to update your own website and use your new tools with confidence.
+  includes: []
+  whoFor: Owners and staff who want to update their own website and use their new tools with confidence.
+  status: available
+- id: nonprofit-government-technology-services
+  order: 25
+  group: digital-consulting
+  title: Nonprofit & Government Technology Services
+  summary: Websites, accessibility, automation and QA for public-sector and nonprofit organizations.
+  includes: []
+  status: coming-soon
+
+# ---------- Website Care & Support ----------
+- id: monthly-care-plans
+  order: 26
+  group: website-care-support
+  title: Monthly Care Plans
+  summary: Uptime and form checks, backups, small edits and a monthly report.
+  priceNote: From $50/mo.
+  includes: []
+  whoFor: Website owners who want someone to keep an eye on their site, back it up and handle small edits.
+  status: available
+- id: domain-hosting-email-setup
+  order: 27
+  group: website-care-support
+  title: Domain, Hosting & Email Setup
+  summary: We set up your domain, free/low-cost hosting and a professional email (you@yourbusiness.com).
+  includes: []
+  whoFor: New businesses and anyone who wants their domain, hosting and professional email set up for them.
+  status: available
+- id: updates-small-changes
+  order: 28
+  group: website-care-support
+  title: Updates & Small Changes
+  summary: New photos, menu or price updates, seasonal promos, done fast.
+  includes: []
+  whoFor: Website owners who need new photos, menu or price updates, or seasonal promos added quickly.
+  status: available

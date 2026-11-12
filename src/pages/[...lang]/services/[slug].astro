@@ -1,0 +1,118 @@
+---
+import Base from "@/layouts/Base.astro";
+import Icons from "@/helpers/Icons.astro";
+import { generatePaths, useTranslations } from "@/lib/utils/i18nUtils";
+import { getServiceGroups, getServices } from "@/lib/utils/siteData";
+import CustomButton from "@/components/CustomButton.astro";
+import PageHeader from "@/components/widgets/PageHeader.astro";
+import FaqSection from "@/components/sections/FaqSection.astro";
+import ProcessSection from "@/components/sections/ProcessSection.astro";
+import CallToAction from "@/components/sections/CallToAction.astro";
+
+// One page per available service in src/content/data/services.yml.
+// Coming-soon services have no detail page.
+export async function getStaticPaths() {
+  const groups = await getServiceGroups();
+  const services = (await getServices()).filter(
+    (service) => service.data.status === "available",
+  );
+
+  return generatePaths().flatMap(({ params }) =>
+    services.map((service) => ({
+      params: { ...params, slug: service.id },
+      props: {
+        service,
+        group: groups.find((group) => group.id === service.data.group),
+      },
+    })),
+  );
+}
+
+const { service, group } = Astro.props;
+const { title, summary, includes, whoFor, priceNote } = service.data;
+
+const t = await useTranslations(Astro.currentLocale as string);
+---
+
+<Base
+  title={title}
+  description={summary}
+  headerPosition="fixed"
+  hasHeaderDarkBackground={true}>
+  <PageHeader
+    eyebrow={group?.data.fullTitle}
+    title={title}
+    description={summary}>
+    <div class="flex flex-wrap items-center justify-center gap-4">
+      <CustomButton
+        label={t("navigation.buttonLabel")}
+        url="/contact/"
+        hoverEffect="creative-fill"
+        class="btn-accent effect-color-light"
+      />
+      {
+        group && (
+          <CustomButton
+            label={t("common.backToServices")}
+            url={`/services/#${group.id}`}
+            variant="outline"
+            hoverEffect="creative-fill"
+            class="btn-outline-light effect-color-accent"
+          />
+        )
+      }
+    </div>
+  </PageHeader>
+
+  {
+    (includes.length > 0 || whoFor) && (
+      <section>
+        <div class="container">
+          <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+            {includes.length > 0 && (
+              <div class="bg-theme-light space-y-6 p-8 md:p-10">
+                <h2 class="text-h4-sm md:text-h4">
+                  {t("common.includedTitle")}
+                </h2>
+                <ul class="space-y-3">
+                  {includes.map((item) => (
+                    <li class="flex items-start gap-3">
+                      <Icons
+                        icon="Check"
+                        class="text-accent-hover mt-1 size-5 shrink-0"
+                        aria-hidden="true"
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                {priceNote && (
+                  <p class="font-secondary text-dark font-semibold">
+                    {priceNote}
+                  </p>
+                )}
+              </div>
+            )}
+            {whoFor && (
+              <div class="border-border-light space-y-6 border p-8 md:p-10">
+                <h2 class="text-h4-sm md:text-h4">
+                  {t("common.whoForTitle")}
+                </h2>
+                <p class="text-lg">{whoFor}</p>
+                {priceNote && includes.length === 0 && (
+                  <p class="font-secondary text-dark font-semibold">
+                    {priceNote}
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <ProcessSection />
+  <FaqSection items={group?.data.faq || []} />
+  <CallToAction />
+</Base>

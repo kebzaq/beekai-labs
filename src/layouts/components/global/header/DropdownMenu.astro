@@ -1,0 +1,121 @@
+---
+import type { NavigationLink } from "@/types";
+import { getLocaleUrlCTM } from "@/lib/utils/i18nUtils.ts";
+import Icons from "@/helpers/Icons.astro";
+
+const { recursive, isMobile } = Astro.props;
+const menu = Astro.props.menu as NavigationLink;
+const { pathname } = Astro.url;
+
+// A top-level item with its own URL: on desktop the dropdown opens on hover and the label is a link.
+// In the mobile menu the label expands the list, and the link is the first item of the list.
+const hasOwnLink = !recursive && !!menu.url;
+const isHoverLink = hasOwnLink && !isMobile;
+const ownUrl = hasOwnLink
+  ? getLocaleUrlCTM(menu.url as string, Astro.currentLocale)
+  : undefined;
+const Toggle = isHoverLink ? "a" : "span";
+---
+
+<li
+  class:list={[
+    "hs-dropdown nav-dropdown group [--auto-close:inside]",
+    recursive ? "nav-dropdown-item [--placement:right-start]" : "nav-item",
+    menu.hasMegaMenu || menu.hasChildren ? "relative" : "",
+    isHoverLink && "lg:[--trigger:hover]",
+    menu.hasMegaMenu
+      ? "lg:[--strategy:fixed]"
+      : menu.hasChildren
+        ? "lg:[--strategy:absolute]"
+        : "",
+  ]}
+  role="menuitem">
+  <Toggle
+    {...(isHoverLink ? { href: ownUrl } : {})}
+    class:list={[
+      "hs-dropdown-toggle nav-toggle",
+      {
+        active:
+          menu.children?.map(({ url }) => url).includes(pathname) ||
+          menu.children?.map(({ url }) => `${url}/`).includes(pathname),
+      },
+      recursive ? "nav-dropdown-link" : "nav-link",
+    ]}>
+    {menu.name}
+
+    <Icons class="nav-toggle-icon" icon="ChevronDown" />
+  </Toggle>
+  {
+    !menu.hasMegaMenu && menu.hasChildren && (
+      <ul
+        class="nav-dropdown-list hs-dropdown-menu"
+        {...(recursive ? { "aria-orientation": "vertical" } : {})}>
+        {hasOwnLink && isMobile && (
+          <li class="nav-dropdown-item" role="menuitem">
+            <a href={ownUrl} class="nav-dropdown-link block">
+              {menu.overviewLabel || menu.name}
+            </a>
+          </li>
+        )}
+        {menu.children?.map((child) =>
+          child.hasChildren ? (
+            child.hasChildren && <Astro.self recursive menu={child} />
+          ) : (
+            <li class="nav-dropdown-item" role="menuitem">
+              <a
+                href={getLocaleUrlCTM(
+                  child.url || Astro.url.origin,
+                  Astro.currentLocale,
+                )}
+                {...{
+                  // Set `rel` attribute for external links or use provided value
+                  rel: child.url?.startsWith("http")
+                    ? child.rel || "noopener noreferrer"
+                    : child.rel || undefined,
+
+                  // Set `target` to "_blank" for external links unless otherwise specified
+                  target: child.url?.startsWith("http")
+                    ? child.target || "_blank"
+                    : child.target || undefined,
+                }}
+                class:list={[
+                  "nav-dropdown-link block",
+                  {
+                    active:
+                      pathname === `${child.url}/` || pathname === child.url,
+                  },
+                ]}>
+                {child.badge ? (
+                  child.badge.type === "dot" ? (
+                    <span class="relative inline-block">
+                      {child.name}
+                      <sup
+                        class:list={[
+                          "badge badge-dot",
+                          child.badge.color && `badge-${child.badge.color}`,
+                        ]}
+                      />
+                    </span>
+                  ) : (
+                    <>
+                      {child.name}
+                      <span
+                        class:list={[
+                          "badge",
+                          child?.badge.color && `badge-${child?.badge.color}`,
+                        ]}>
+                        {child?.badge.label}
+                      </span>
+                    </>
+                  )
+                ) : (
+                  child.name
+                )}
+              </a>
+            </li>
+          ),
+        )}
+      </ul>
+    )
+  }
+</li>

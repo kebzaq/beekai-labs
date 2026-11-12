@@ -1,0 +1,10 @@
+---
+interface Props {
+  icon: keyof typeof import("lucide");
+  [key: string]: any;
+}
+
+const { icon, ...restProps } = Astro.props;
+---
+
+<span data-lucide={icon} {...restProps}></span>

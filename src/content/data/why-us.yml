@@ -1,0 +1,42 @@
+# "Why work with us" items, shown on the homepage.
+# `icon` is a Lucide icon name (https://lucide.dev/icons), written in PascalCase.
+- id: one-team
+  order: 1
+  title: One team for everything
+  description: Web, AI, automation and SEO, no juggling vendors.
+  icon: Users
+- id: built-for-your-industry
+  order: 2
+  title: Built for your industry
+  description: Layouts and features made for salons, cafés, home services and nonprofits.
+  icon: LayoutTemplate
+- id: qa-tested
+  order: 3
+  title: QA-tested before launch
+  description: Every site is tested across devices and browsers.
+  icon: ShieldCheck
+- id: you-own-it
+  order: 4
+  title: You own your website
+  description: No platform lock-in or surprise fees.
+  icon: KeyRound
+- id: responsible-ai
+  order: 5
+  title: Practical, responsible AI
+  description: Tools that help, used safely.
+  icon: Sparkles
+- id: clear-pricing
+  order: 6
+  title: Clear pricing & honest reporting
+  description: You always know what you're paying for.
+  icon: ReceiptText
+- id: fast-turnaround
+  order: 7
+  title: Fast turnaround
+  description: See a preview of your new site before you commit.
+  icon: Rocket
+- id: local-friendly
+  order: 8
+  title: Local & friendly
+  description: Real people in New York who answer your calls.
+  icon: Handshake
