@@ -8,7 +8,7 @@
   # TODO: add a real logo. While `logo` and `logoAlternate` are empty, the header and footer show `logoText` as a text wordmark.
   logo             = "" # Path to the site's logo (for example "/images/logo.svg")
   logoAlternate    = "" # Path to the site's alternate logo for dark backgrounds
-  logoText         = 'BeeK<span class="text-accent">AI</span> <span class="logo-text-sub">Labs</span>' # Text wordmark (also shown next to the logo image when one is set)
+  logoText         = '<span class="text-accent">BeeKai</span> <span class="logo-text-sub">Labs</span>' # Text wordmark (also shown next to the logo image when one is set)
   logoWidth        = "86px" # Width of the logo
   logoHeight       = "24px" # Height of the logo
 
