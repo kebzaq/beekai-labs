@@ -28,24 +28,25 @@ if (!enable) {
 ---
 
 <section id="about">
-  <div class="container">
-    <div class="grid grid-cols-1 gap-x-20 gap-y-12 lg:grid-cols-2">
-      <SectionHeader title={title} description={description} align="left" />
-      {
-        mission && (
-          <div class="bg-theme-darker text-light space-y-5 p-8 md:p-12">
-            {mission.title && (
-              <h2 class="text-h4-sm md:text-h4 text-accent">{mission.title}</h2>
-            )}
-            {mission.description && (
-              <p
-                class="text-lg"
-                set:html={markdownify(mission.description)}
-              />
-            )}
-          </div>
-        )
-      }
-    </div>
+  <div class="container space-y-14">
+    <SectionHeader title={title} description={description} />
+    {
+      mission?.description && (
+        <div class="bg-theme-darker text-light border-accent mx-auto max-w-4xl space-y-5 border-s-4 p-8 md:p-12">
+          {mission.title && (
+            <h2 class="text-h4-sm md:text-h4 text-accent">{mission.title}</h2>
+          )}
+          <p
+            class="text-xl md:text-2xl"
+            set:html={markdownify(mission.description)}
+          />
+          {mission.tagline && (
+            <p class="font-secondary text-accent-light text-sm uppercase">
+              {mission.tagline}
+            </p>
+          )}
+        </div>
+      )
+    }
   </div>
 </section>

@@ -1,0 +1,47 @@
+---
+import type { z } from "astro/zod";
+import { getSectionContent } from "@/lib/contentParser.astro";
+import type { valuesSectionSchema } from "@/sections.schema";
+import FeatureCard from "@/components/cards/FeatureCard.astro";
+import SectionHeader from "@/components/widgets/SectionHeader.astro";
+
+type ValuesContent = NonNullable<z.infer<typeof valuesSectionSchema>>;
+
+type Props = {
+  content?: ValuesContent;
+};
+
+const {
+  enable = true,
+  title,
+  description,
+  list = [],
+} = await getSectionContent<ValuesContent>(
+  "values-section",
+  Astro.props.content,
+  Astro.currentLocale,
+);
+
+if (!enable || list.length === 0) {
+  return null;
+}
+---
+
+<section id="values">
+  <div class="container space-y-14">
+    <SectionHeader title={title} description={description} />
+    <ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+      {
+        list.map((item) => (
+          <li>
+            <FeatureCard
+              icon={item.icon}
+              title={item.title}
+              description={item.description}
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

@@ -197,20 +197,50 @@ export const serviceGroupsSectionSchema = baseSectionSchema
 export const aboutSectionSchema = baseSectionSchema
   .extend({
     mission: z
-      .object({ title: z.string(), description: z.string() })
+      .object({
+        title: z.string(),
+        description: z.string(),
+        tagline: z.string(),
+      })
       .partial()
+      .optional(),
+  })
+  .optional();
+
+export const storySectionSchema = baseSectionSchema
+  .extend({
+    // Honeycomb visual: the name parts and the name they combine into
+    nameParts: z
+      .array(z.object({ label: z.string(), note: z.string().optional() }))
+      .optional(),
+    nameResult: z.string().optional(),
+  })
+  .optional();
+
+export const valuesSectionSchema = baseSectionSchema
+  .extend({
+    list: z
+      .array(
+        z.object({
+          icon: z.string().optional(),
+          title: z.string(),
+          description: z.string().optional(),
+        }),
+      )
       .optional(),
   })
   .optional();
 
 export const teamSectionSchema = baseSectionSchema
   .extend({
+    focusLabel: z.string().optional(),
     list: z
       .array(
         z.object({
           name: z.string(),
           role: z.string().optional(),
           bio: z.string().optional(),
+          focus: z.string().optional(),
           image: z.string().optional(),
         }),
       )
@@ -236,6 +266,8 @@ export const sectionsSchema = {
   pricingSection: pricingSectionSchema,
   serviceGroupsSection: serviceGroupsSectionSchema,
   aboutSection: aboutSectionSchema,
+  storySection: storySectionSchema,
+  valuesSection: valuesSectionSchema,
   teamSection: teamSectionSchema,
   faqSection: faqSectionSchema,
 };
