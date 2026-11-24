@@ -10,6 +10,7 @@ services:
   - ai-phone-receptionist-booking
   - workflow-automation
 summary: "An AI phone agent that answers every call, 24/7, and turns callers into online bookings, with no one stuck at the front desk phone."
+cardSummary: "An AI phone agent that answers every call 24/7 and texts callers a link to book online." # Shorter line for the project cards
 # Case study text: keep a blank line between paragraphs
 challenge: |
   Many of Autumn's Nail Spa's clients still prefer to call. But while technicians are busy with customers, the phone often goes unanswered, and every booking taken by phone has to be scheduled by hand. Missed calls mean missed appointments, especially after hours.

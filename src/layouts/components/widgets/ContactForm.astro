@@ -1,11 +1,11 @@
 ---
 import { markdownify, toLowerCase } from "@/lib/utils/textConverter";
 import CustomButton from "@/components/CustomButton.astro";
+import Icons from "@/helpers/Icons.astro";
 import type { z } from "astro/zod";
 import type { contactFormSchema } from "@/sections.schema";
 import type { inputFieldSchema } from "@/sections.schema";
 import { getPrelineSelectConfig } from "@/lib/utils/preline";
-import config from ".astro/config.generated.json";
 
 interface Props {
   form: z.infer<typeof contactFormSchema>;
@@ -13,12 +13,15 @@ interface Props {
   appearance?: "light" | "dark";
 }
 
-const {
-  settings: { contactFormAction, contactFormProvider },
-} = config;
-
 // Generate ID from label (Required for Input Radio and Checkbox)
 const genIdFromLabel = (label: string) => toLowerCase(label).replace(" ", "-");
+
+// ID for a text field, so its label is linked to it (clicking the label focuses the field,
+// screen readers announce the label)
+const fieldId = (input: z.infer<typeof inputFieldSchema>) =>
+  input.id ||
+  `contact-${toLowerCase(input.name || input.label || "field").replace(/[^a-z0-9]+/g, "-")}`;
+
 
 // Combine same group radio to show them together without space
 const combineRadio = (list: z.infer<typeof inputFieldSchema>[]) => {
@@ -65,6 +68,7 @@ const combineRadio = (list: z.infer<typeof inputFieldSchema>[]) => {
 };
 
 let { form, appearance = "light" } = Astro.props;
+const thankYou = form.thankYou;
 const isDark = appearance === "dark";
 form = {
   ...form,
@@ -80,40 +84,41 @@ const noteStyles = {
 };
 ---
 
+<div>
 <form
   id="contact-form"
-  {...{
-    "data-action": contactFormAction,
-    "data-provider": contactFormProvider,
-    "data-netlify": contactFormProvider === "netlify" ? "true" : undefined,
-    action: contactFormProvider === "netlify" ? contactFormAction : undefined,
-  }}
+  name="contact"
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+  data-action="/"
   method="post"
   class:list={[
     "grid grid-cols-2 gap-x-4 gap-y-6",
     isDark && "form-dark",
     Astro.props.class,
   ]}>
-  {/* Some Hidden Inputs For Provider Like Netlify, Formspree Etc. */}
+  {/* Netlify Forms (https://docs.netlify.com/forms/setup/). Netlify finds this form in the built
+      HTML by its name; notification emails are set up in the Netlify dashboard. */}
+  <input type="hidden" name="form-name" value="contact" />
+  {/* Subject of Netlify's notification email; {name} is filled in when the form is sent */}
   {
     form.emailSubject && (
       <input
         type="hidden"
-        name={
-          ["formsubmit.co", "formspree"].includes(contactFormProvider)
-            ? "_subject"
-            : "subject"
-        }
+        name="subject"
         value={form.emailSubject}
+        data-template={form.emailSubject}
       />
     )
   }
 
-  {
-    contactFormProvider === "formsubmit.co" && (
-      <input type="hidden" name="_template" value="table" />
-    )
-  }
+  {/* Honeypot spam protection: hidden from people and screen readers, so only bots fill it in */}
+  <div class="hidden" aria-hidden="true">
+    <label>
+      Leave this field empty
+      <input type="text" name="bot-field" tabindex="-1" autocomplete="off" />
+    </label>
+  </div>
 
   {
     form.inputs.map((input) => (
@@ -121,14 +126,15 @@ const noteStyles = {
         input-wrapper
         class:list={[
           "flex flex-col",
-          input.halfWidth ? "max-sm:col-span-2" : "col-span-2",
+          // Side-by-side fields keep their own height, so an error under one doesn't stretch the other
+          input.halfWidth ? "self-start max-sm:col-span-2" : "col-span-2",
           input.parentClass,
         ]}>
         {!input.note &&
           input.type !== "checkbox" &&
           input.type !== "radio" &&
           (input.groupLabel || input.label) && (
-            <label for="name" class="form-label">
+            <label for={fieldId(input)} class="form-label">
               {input.groupLabel || input.label || "Please set label"}
               {input.required && <span class="text-primary">*</span>}
             </label>
@@ -164,6 +170,7 @@ const noteStyles = {
           </div>
         ) : input.tag === "textarea" ? (
           <textarea
+            id={fieldId(input)}
             rows={input.rows || "4"}
             name={input.name || input.label || "Please set name value"}
             placeholder={input.placeholder || "Please set placeholder"}
@@ -240,16 +247,36 @@ const noteStyles = {
             set:html={markdownify(input.content || "", true)}
           />
         ) : (
-          <input
-            {...(input.defaultValue && {
-              value: input.defaultValue,
-            })}
-            type={input.type || "text"}
-            name={input.name || input.label || "Please set name value"}
-            placeholder={input.placeholder || "Please set placeholder"}
-            class="form-input"
-            {...(input.required && { required: true })}
-          />
+          <>
+            <input
+              {...(input.defaultValue && {
+                value: input.defaultValue,
+              })}
+              id={fieldId(input)}
+              type={input.type || "text"}
+              autocomplete={input.autocomplete}
+              inputmode={input.type === "tel" ? "tel" : undefined}
+              data-validate={
+                input.type === "email"
+                  ? "email"
+                  : input.type === "tel"
+                    ? "phone"
+                    : undefined
+              }
+              name={input.name || input.label || "Please set name value"}
+              placeholder={input.placeholder || "Please set placeholder"}
+              class="form-input"
+              {...(input.required && { required: true })}
+            />
+            {/* Inline error for email and phone, filled in by the validation script below */}
+            {(input.type === "email" || input.type === "tel") && (
+              <p
+                id={`${fieldId(input)}-error`}
+                class="mt-2 hidden text-sm text-red-600"
+                aria-live="polite"
+              />
+            )}
+          </>
         )}
       </div>
     ))
@@ -281,21 +308,272 @@ const noteStyles = {
   }
 </form>
 
+{/* Thank-you panel: replaces the form after a successful submission (see the script below) */}
+{
+  thankYou && (
+    <div id="contact-thanks" class="hidden scroll-mt-32" aria-live="polite">
+      <div class="bg-theme-light flex h-full flex-col justify-center gap-6 rounded-xl p-8 md:p-10">
+        <span
+          class="animate-pop-in flex size-14 items-center justify-center rounded-full bg-green-600 text-white ring-8 ring-green-600/15 motion-reduce:animate-none"
+          aria-hidden="true">
+          <Icons icon="Check" class="size-7" />
+        </span>
+
+        <div class="space-y-3">
+          <h3
+            id="contact-thanks-heading"
+            tabindex="-1"
+            class="text-h4-sm md:text-h4 outline-none">
+            {thankYou.title}
+          </h3>
+          <p class="text-lg">{thankYou.text}</p>
+          {thankYou.linksText && (
+            <p data-thanks-links class="hidden">
+              {thankYou.linksText}
+            </p>
+          )}
+        </div>
+
+        {thankYou.nextSteps && thankYou.nextSteps.length > 0 && (
+          <div class="space-y-3">
+            {thankYou.nextTitle && (
+              <p class="font-secondary text-dark font-semibold">
+                {thankYou.nextTitle}
+              </p>
+            )}
+            <ol class="space-y-2">
+              {thankYou.nextSteps.map((step, index) => (
+                <li class="flex items-start gap-3">
+                  <span
+                    class="bg-accent font-secondary text-dark mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold"
+                    aria-hidden="true">
+                    {index + 1}
+                  </span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+
+        <div class="flex flex-wrap gap-3">
+          {thankYou.primaryButton?.enable !== false && thankYou.primaryButton && (
+            <CustomButton
+              hoverEffect="creative-fill"
+              class="btn-accent effect-color-dark"
+              {...thankYou.primaryButton}
+            />
+          )}
+          {thankYou.secondaryButton?.enable !== false &&
+            thankYou.secondaryButton && (
+              <CustomButton
+                variant="outline"
+                hoverEffect="creative-fill"
+                class="effect-color-dark"
+                {...thankYou.secondaryButton}
+              />
+            )}
+        </div>
+
+        {thankYou.resetLabel && (
+          <button
+            type="button"
+            data-thanks-reset
+            class="font-secondary text-dark hover:text-accent-hover w-fit text-sm underline underline-offset-4">
+            {thankYou.resetLabel}
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
+</div>
+
 <script>
   import "@preline/select";
   import {
-    formspreeSubmit,
     netlifySubmit,
-    formSubmit,
     isFormFilled,
     setMessage,
     validateSelectTag,
   } from "@/lib/utils/HandleForm";
 
+  // ---------- Email and phone validation ----------
+  const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/; // name@domain.tld, no spaces
+  const ERRORS = {
+    email: "Please enter a valid email address.",
+    phone: "Please enter a valid phone number.",
+  };
+
+  // Digits typed so far, and whether the number starts with "+"
+  const readPhone = (value: string) => ({
+    plus: value.trim().startsWith("+"),
+    digits: value.replace(/\D/g, ""),
+  });
+
+  // US numbers: (315) 555-0123, with an optional leading 1 or +1 (11 digits).
+  // Other numbers starting with "+": up to 15 digits (E.164), grouped loosely with spaces.
+  const formatPhone = (value: string) => {
+    const { plus, digits } = readPhone(value);
+    if (plus && !digits.startsWith("1")) {
+      return ("+" + digits.slice(0, 15).replace(/(\d{3})(?=\d)/g, "$1 ")).trim();
+    }
+    const hasCountryCode = plus || digits.startsWith("1");
+    const national = (hasCountryCode ? digits.slice(1) : digits).slice(0, 10);
+    const prefix = plus ? "+1" : hasCountryCode ? "1" : "";
+    let formatted = national;
+    if (national.length > 6) {
+      formatted = `(${national.slice(0, 3)}) ${national.slice(3, 6)}-${national.slice(6)}`;
+    } else if (national.length > 3) {
+      formatted = `(${national.slice(0, 3)}) ${national.slice(3)}`;
+    }
+    if (!prefix) return formatted;
+    return formatted ? `${prefix} ${formatted}` : prefix;
+  };
+
+  const isValidPhone = (value: string) => {
+    if (!value.trim()) return true; // Optional field
+    const { plus, digits } = readPhone(value);
+    if (plus && !digits.startsWith("1")) return digits.length >= 8 && digits.length <= 15;
+    if (plus || digits.startsWith("1")) return digits.length === 11;
+    return digits.length === 10;
+  };
+
+  const isValid = (input: HTMLInputElement) => {
+    if (input.dataset.validate === "email") {
+      return EMAIL_PATTERN.test(input.value.trim());
+    }
+    if (input.dataset.validate === "phone") return isValidPhone(input.value);
+    return true;
+  };
+
+  const showError = (input: HTMLInputElement) => {
+    const error = document.getElementById(`${input.id}-error`);
+    input.setAttribute("aria-invalid", "true");
+    if (error) {
+      error.textContent = ERRORS[input.dataset.validate as keyof typeof ERRORS];
+      error.classList.remove("hidden");
+      input.setAttribute("aria-describedby", error.id);
+    }
+  };
+
+  const clearError = (input: HTMLInputElement) => {
+    const error = document.getElementById(`${input.id}-error`);
+    input.removeAttribute("aria-invalid");
+    input.removeAttribute("aria-describedby");
+    if (error) {
+      error.textContent = "";
+      error.classList.add("hidden");
+    }
+  };
+
+  // Checks a field, shows or clears its error, and returns whether it is valid
+  const validateField = (input: HTMLInputElement) => {
+    if (input.dataset.validate === "email") input.value = input.value.trim();
+    const valid = isValid(input);
+    if (valid) clearError(input);
+    else showError(input);
+    return valid;
+  };
+
+  // Validates every checked field; focuses the first invalid one
+  const validateAll = (form: HTMLFormElement) => {
+    const fields = Array.from(
+      form.querySelectorAll<HTMLInputElement>("input[data-validate]"),
+    );
+    const invalid = fields.filter((field) => !validateField(field));
+    invalid[0]?.focus();
+    return invalid.length === 0;
+  };
+
+  const setUpValidation = (form: HTMLFormElement) => {
+    form
+      .querySelectorAll<HTMLInputElement>("input[data-validate]")
+      .forEach((input) => {
+        // Check when leaving the field, not on every keystroke
+        input.addEventListener("blur", () => validateField(input));
+
+        input.addEventListener("input", () => {
+          if (input.dataset.validate === "phone") {
+            // Keep only digits (and a leading "+"), format as you type, keep the caret in place
+            const caret = input.selectionStart ?? input.value.length;
+            const keptBeforeCaret = input.value
+              .slice(0, caret)
+              .replace(/[^\d+]/g, "").length;
+            const formatted = formatPhone(input.value);
+            input.value = formatted;
+            let position = 0;
+            for (let kept = 0; position < formatted.length && kept < keptBeforeCaret; position++) {
+              if (/[\d+]/.test(formatted[position])) kept++;
+            }
+            input.setSelectionRange(position, position);
+          }
+          // An error shown earlier goes away as soon as the value is valid
+          if (input.getAttribute("aria-invalid") === "true" && isValid(input)) {
+            clearError(input);
+          }
+        });
+      });
+
+    // Check email and phone before the browser's own required-field check runs
+    form
+      .querySelector<HTMLButtonElement>('button[type="submit"]')
+      ?.addEventListener("click", (event) => {
+        if (!validateAll(form)) event.preventDefault();
+      });
+  };
+
   document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById(
       "contact-form",
     ) as HTMLFormElement | null;
+
+    if (form) setUpValidation(form);
+
+    // ---------- Thank-you panel ----------
+    const thanks = document.getElementById("contact-thanks");
+
+    const showThanks = (sharedLinks: boolean) => {
+      if (!form || !thanks) return;
+      // Same height as the form, so the layout doesn't jump
+      thanks.style.minHeight = `${form.offsetHeight}px`;
+      form.classList.add("hidden");
+      form
+        .querySelectorAll(".message")
+        .forEach((message) => message.classList.add("hidden"));
+      thanks
+        .querySelector("[data-thanks-links]")
+        ?.classList.toggle("hidden", !sharedLinks);
+      thanks.classList.remove("hidden");
+
+      // Keyboard and screen reader users land on the heading
+      document
+        .getElementById("contact-thanks-heading")
+        ?.focus({ preventScroll: true });
+
+      // On small screens the panel can start above or below the visible area
+      const { top } = thanks.getBoundingClientRect();
+      if (top < 0 || top > window.innerHeight * 0.5) {
+        const reduceMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+        thanks.scrollIntoView({
+          behavior: reduceMotion ? "auto" : "smooth",
+          block: "start",
+        });
+      }
+    };
+
+    thanks
+      ?.querySelector("[data-thanks-reset]")
+      ?.addEventListener("click", () => {
+        if (!form) return;
+        thanks.classList.add("hidden");
+        thanks.style.minHeight = "";
+        form.classList.remove("hidden");
+        form.querySelector<HTMLInputElement>('input[name="name"]')?.focus();
+      });
+    let isSending = false; // Blocks a second submit while the first is being sent
 
     let selectTags = form?.querySelectorAll(
       "[input-wrapper]:not(.hidden) select[data-hs-select]",
@@ -330,7 +608,8 @@ const noteStyles = {
     form?.addEventListener("submit", async (e: Event) => {
       e.preventDefault();
 
-      const provider = form?.getAttribute("data-provider") || "";
+      if (isSending || !validateAll(form)) return;
+
       const action = form?.getAttribute("data-action") || "";
 
       selectTags = form?.querySelectorAll(
@@ -341,6 +620,29 @@ const noteStyles = {
       selectTags.forEach(validateSelectTag);
 
       if (isFormFilled(form)) {
+        // Honeypot filled in: a bot. Show the usual success message and send nothing.
+        const honeypot = form.querySelector<HTMLInputElement>(
+          "[aria-hidden='true'] input",
+        );
+        if (honeypot?.value) {
+          setMessage("default", true, false, form);
+          return;
+        }
+
+        // Fill in the subject template, e.g. "New free preview request from {name}"
+        const subject = form.querySelector<HTMLInputElement>(
+          "input[data-template]",
+        );
+        if (subject?.dataset.template) {
+          subject.value = subject.dataset.template.replace(
+            /\{(\w+)\}/g,
+            (_, key: string) =>
+              form
+                .querySelector<HTMLInputElement>(`[name="${key}" i]`)
+                ?.value.trim() || "the website",
+          );
+        }
+
         // Console form data for debugging
         const formData = Object.fromEntries(new FormData(form).entries());
         console.log(
@@ -349,30 +651,31 @@ const noteStyles = {
             .join("\n\n"),
         );
 
-        setMessage("Form Submitting!...", true, true, form);
+        // Netlify Forms only exists on the deployed site. On localhost nothing is sent
+        // (and no success is shown); the form data is logged above instead.
+        const isLocalhost = ["localhost", "127.0.0.1", "[::1]"].includes(
+          window.location.hostname,
+        );
+        if (isLocalhost) {
+          console.warn(
+            "[contact form] Not sent: Netlify Forms only works on the deployed site (https://beekai.netlify.app). Test the form there.",
+          );
+          return;
+        }
+
+        setMessage("Sending...", true, true, form);
+        isSending = true;
+        form.setAttribute("aria-busy", "true");
 
         try {
-          switch (provider) {
-            case "netlify":
-              await netlifySubmit(form, action);
-              break;
-            case "formsubmit.co":
-              await formSubmit({
-                form,
-                action,
-              });
-              break;
-            case "formspree":
-              await formspreeSubmit(
-                action,
-                Object.fromEntries(new FormData(form).entries()),
-                5000,
-                form,
-              );
-              break;
-            default:
-              throw new Error("Unknown form provider.");
-          }
+          // Netlify Forms: URL-encoded POST to "/" (15-second timeout).
+          // The thank-you panel only appears when Netlify confirmed the submission;
+          // on errors or a timeout the form stays, with its error message and the input.
+          const sharedLinks = !!form
+            .querySelector<HTMLInputElement>('input[name="links"]')
+            ?.value.trim();
+          const sent = await netlifySubmit(form, action);
+          if (sent) showThanks(sharedLinks);
         } catch (error) {
           setMessage(
             error + "! Please try again later or contact us by email.",
@@ -381,6 +684,8 @@ const noteStyles = {
             form,
           );
         }
+        isSending = false;
+        form.removeAttribute("aria-busy");
       }
     });
   });

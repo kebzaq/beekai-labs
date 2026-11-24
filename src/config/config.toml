@@ -66,12 +66,7 @@
 
   stickyHeader = true # Enables scroll-aware sticky behavior (e.g., hide on scroll down), not applicable to fixed headers
 
-  # Contact form settings
-  # Available providers: "formspree", "formsubmit.co", "netlify"
-  # Available actions: "https://formspree.io/f/your_form_id", "https://formsubmit.co/your_email@example.com", "/"
-  # Set contactFormAction to your own endpoint before you deploy (see "Contact Form Setup" in the README).
-  contactFormAction   = "https://formsubmit.co/your_email@example.com"
-  contactFormProvider = "formsubmit.co"
+  # Contact form: Netlify Forms (form name "contact"). Email notifications are set up in the Netlify dashboard.
 
   footerDescription = "" # Check src/i18n/en.json and src/i18n/fr.json for changing the footer description in different languages or directly add value here if you are not using internationalization feature
 

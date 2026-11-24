@@ -40,7 +40,12 @@ const {
   <nav class="xl:container-12xl relative max-xl:container">
     <div
       class="hs-dropdown relative flex items-center justify-between py-6 [--auto-close:inside] [--gpu-acceleration:false] [--strategy:absolute] lg:[--strategy:static]">
-      {hasDarkBackground ? <Logo src={logoAlternate} /> : <Logo />}
+      {/* The logo stays on one line, so the compact button and menu button fit beside it on phones */}
+      {hasDarkBackground ? (
+        <Logo src={logoAlternate} class="shrink-0 whitespace-nowrap" />
+      ) : (
+        <Logo class="shrink-0 whitespace-nowrap" />
+      )}
 
       <!-- Navbar For Header -->
       <Navbar />
@@ -78,6 +83,22 @@ const {
               />
             )}
           </div>
+        )
+      }
+
+      {/* Compact navigation button for small devices, next to the menu button */}
+      {
+        navigationButton.enable && (
+          <CustomButton
+            variant="fill"
+            hoverEffect="creative-fill"
+            {...navigationButton}
+            label={t("navigation.buttonLabelMobile")}
+            class:list={[
+              "btn-accent text-2xs ms-auto px-2.5 py-2 sm:me-2 sm:px-4 sm:py-2.5 sm:text-sm lg:hidden",
+              hasDarkBackground ? "effect-color-light" : "effect-color-dark",
+            ]}
+          />
         )
       }
 

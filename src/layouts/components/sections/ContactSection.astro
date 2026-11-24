@@ -23,6 +23,7 @@ const {
   title,
   description,
   note,
+  secondaryNote,
   form,
 } = await getSectionContent<ContactContent>(
   "contact-section",
@@ -65,6 +66,18 @@ if (!enable) {
                 aria-hidden="true"
               />
               <p>{note}</p>
+            </div>
+          )
+        }
+        {
+          secondaryNote && (
+            <div class="font-secondary text-dark -mt-5 flex items-center gap-3 font-medium">
+              <Icons
+                icon="ShieldCheck"
+                class="text-accent-hover size-5 shrink-0"
+                aria-hidden="true"
+              />
+              <p>{secondaryNote}</p>
             </div>
           )
         }

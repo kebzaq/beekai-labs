@@ -178,3 +178,9 @@ select:focus {
     stop-color: var(--color-primary) !important;
   }
 }
+
+/* Invalid field (set by the contact form validation) */
+.form-input[aria-invalid="true"],
+.form-input[aria-invalid="true"]:focus {
+  @apply border-red-600;
+}

@@ -10,6 +10,7 @@ services:
   - workflow-automation
   - app-tool-integrations
 summary: "Every website request becomes an instant confirmation, a CRM record and a team alert, with a review request after the job."
+cardSummary: "Website requests become instant confirmations, CRM records and team alerts, with no manual data entry." # Shorter line for the project cards
 # Case study text: keep a blank line between paragraphs
 challenge: |
   What happens after a customer clicks "Request service"?

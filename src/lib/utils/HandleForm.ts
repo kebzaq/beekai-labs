@@ -125,74 +125,6 @@ export const setMessage = (
 };
 
 /**
- * Submits form data to a specified endpoint with timeout and error handling.
- * Uses an alternative form submission if the main submission fails.
- *
- * @param param0 - Object containing the form element and unique string for form submission.
- */
-export const formSubmit = async ({
-  form,
-  action,
-}: {
-  form: HTMLFormElement;
-  action: string;
-}) => {
-  const data = Object.fromEntries(new FormData(form).entries());
-  const controller = new AbortController();
-  const signal = controller.signal;
-  const timeout = 60000;
-
-  // Replace 'formsubmit.co' with 'formsubmit.co/ajax' to submit form data with AJAX
-  const ajaxAction = action.replace("formsubmit.co/", "formsubmit.co/ajax/");
-
-  const timer = setTimeout(() => {
-    controller.abort();
-  }, timeout);
-
-  fetch(ajaxAction, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify(data),
-    signal,
-  })
-    .then(async (response: any) => {
-      // Parse JSON response
-      const jsonResponse = await response.json();
-
-      // Check success status in the JSON response
-      if (jsonResponse.success === "true") {
-        setMessage("default", true, false, form);
-        formReset(form);
-      } else if (jsonResponse.success === "false") {
-        setMessage(jsonResponse.message, false, false, form);
-      }
-    })
-    .catch(async (error) => {
-      if (error.name === "AbortError") {
-        setMessage(
-          "We couldn't reach the server. Trying alternative server.",
-          false,
-          false,
-          form,
-        );
-      } else {
-        setMessage(
-          "Oops! There was a problem submitting your form.",
-          false,
-          false,
-          form,
-        );
-      }
-    })
-    .finally(() => {
-      clearTimeout(timer);
-    });
-};
-
-/**
  * Sends a POST request with a specified timeout and aborts if the timeout is exceeded.
  *
  * @param url - The URL to send the request to.
@@ -250,29 +182,50 @@ export const formspreeSubmit = async (
 };
 
 /**
- * Submits form data for Netlify.
+ * Submits the form to Netlify Forms with fetch, so the visitor stays on the page.
+ * Shows the success message and resets the form, or shows the error message.
+ * Returns true only when Netlify confirmed the submission.
  *
- * @param form - The form element.
- * @param action - The form action endpoint.
+ * @param form - The form element (must include the hidden "form-name" field).
+ * @param action - Where to POST, "/" for Netlify Forms.
+ * @param timeout - Milliseconds before giving up (default 15 seconds).
  */
-export const netlifySubmit = async (form: HTMLFormElement, action: string) => {
+export const netlifySubmit = async (
+  form: HTMLFormElement,
+  action = "/",
+  timeout = 15000,
+): Promise<boolean> => {
+  // Netlify Forms takes a URL-encoded POST that includes the hidden "form-name" field
   const data = new URLSearchParams(new FormData(form) as any).toString();
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeout);
+
   try {
     const response = await fetch(action, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: data,
+      signal: controller.signal,
     });
-    if (response.ok) {
-      setMessage("default", true, false, form);
-      formReset(form);
-    } else {
-      throw new Error("Netlify form submission failed.");
+    if (!response.ok) {
+      throw new Error(`Netlify Forms answered with status ${response.status}`);
     }
+    setMessage("default", true, false, form);
+    formReset(form);
+    return true;
   } catch (error) {
-    setMessage("Netlify submission error: " + error, false, false, form);
-    throw error;
+    console.error("[contact form]", error);
+    const timedOut = (error as Error).name === "AbortError";
+    setMessage(
+      timedOut
+        ? "The request took too long. Please try again, or contact us by email."
+        : "default", // The form's own error message
+      false,
+      false,
+      form,
+    );
+    return false;
+  } finally {
+    clearTimeout(timer);
   }
 };

@@ -52,7 +52,9 @@
   },
   "navigation": {
     "buttonLabel": "<span class=\"lg:max-xl:hidden\">Get a </span>Free Preview",
-    "buttonLabelComment": "The header shows the shorter \"Free Preview\" between the lg and xl breakpoints (1024-1319px), where the full label would crowd the nav links. The mobile menu shows the full label."
+    "buttonLabelComment": "The header shows the shorter \"Free Preview\" between the lg and xl breakpoints (1024-1319px), where the full label would crowd the nav links. The mobile menu shows the full label.",
+    "buttonLabelMobile": "Free Preview",
+    "buttonLabelMobileComment": "Compact header button next to the hamburger menu, below the lg breakpoint (under 1024px)"
   },
   "footer": {
     "description": "Websites, AI and automation for small businesses, nonprofits and public organizations.",
