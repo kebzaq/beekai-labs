@@ -35,10 +35,10 @@ const industry = (await getIndustries()).find(
   (item) => item.id === data.industry,
 );
 
-// Client and industry line (the client is skipped when it repeats the title
-// or is still a placeholder on the live site)
+// Client and industry line (the client is skipped when the title already names it,
+// or while it is still a placeholder on the live site)
 const client = ready(data.client);
-const meta = [client !== data.title && client, industry?.data.title]
+const meta = [client && !data.title.includes(client) && client, industry?.data.title]
   .filter(Boolean)
   .join(" · ");
 
@@ -65,13 +65,9 @@ const coverImage =
     ? (await coverFiles[coverPath]()).default
     : undefined;
 
-// Problem / solution / result lines, without placeholders on the live site
-const details = [
-  { label: t("common.problemLabel"), value: ready(data.challenge) },
-  { label: t("common.solutionLabel"), value: ready(data.solution) },
-  { label: t("common.resultLabel"), value: ready(data.results) },
-].filter((item) => item.value);
-const summary = ready(data.summary);
+// One-line description (cardSummary, or the summary). The challenge / solution / results
+// text is only on the case study page.
+const summary = ready(data.cardSummary || data.summary);
 
 const statusClass = {
   Live: "status-badge-live",
@@ -154,27 +150,12 @@ const linkClass =
       <a href={slug} class="hover:text-accent-hover">{data.title}</a>
     </Heading>
 
-    {/* Website projects and projects with a photo cover show the summary,
-        other projects their problem / solution / result lines */}
     {
-      isWebsite || coverImage ? (
-        summary && (
-          <p
-            class:list={[featured && "text-lg"]}
-            set:html={markdownify(summary)}
-          />
-        )
-      ) : (
-        <dl class="space-y-3">
-          {details.map((item) => (
-            <div>
-              <dt class="font-secondary text-dark text-sm font-semibold">
-                {item.label}
-              </dt>
-              <dd set:html={markdownify(item.value as string)} />
-            </div>
-          ))}
-        </dl>
+      summary && (
+        <p
+          class:list={[featured && "text-lg"]}
+          set:html={markdownify(summary)}
+        />
       )
     }
 

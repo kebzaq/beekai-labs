@@ -171,6 +171,7 @@ const portfolioCollection = defineCollection({
     industry: z.string().optional(), // id from industries.yml
     services: z.array(z.string()).default([]), // ids from services.yml
     summary: z.string(),
+    cardSummary: z.string().optional(), // Shorter description for the project cards. Default: summary
     challenge: z.string(),
     solution: z.string(),
     results: z.string(),

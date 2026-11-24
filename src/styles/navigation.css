@@ -2,6 +2,14 @@
 .header {
   @apply relative z-30 w-full;
 
+  /* Slightly smaller logo on small phones (under 375px), so the compact header button fits beside it.
+     A plain media query, not a theme breakpoint, so the container widths stay the same. */
+  @media (width < 375px) {
+    .logo-wrapper .logo-text {
+      @apply text-lg;
+    }
+  }
+
   &.has-sticky-behavior {
     @apply top-0 z-40 transition-[transform,_opacity,_0.3s_background] duration-500;
   }

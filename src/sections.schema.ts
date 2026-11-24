@@ -47,7 +47,8 @@ export const inputFieldSchema = z.object({
   selected: z.boolean().optional(),
   value: z.boolean().optional(),
   checked: z.boolean().optional(),
-  type: z.enum(["text", "email", "radio", "checkbox"]).optional(),
+  type: z.enum(["text", "email", "tel", "radio", "checkbox"]).optional(),
+  autocomplete: z.string().optional(), // Browser autofill hint, e.g. "tel"
   id: z.string().optional(),
   tag: z.literal("textarea").optional(),
   rows: z.string().optional(),
@@ -104,6 +105,19 @@ export const contactFormSchema = z.object({
     label: z.string(),
   }),
   inputs: z.array(inputFieldSchema),
+  // Panel that replaces the form after a successful submission
+  thankYou: z
+    .object({
+      title: z.string(),
+      text: z.string(),
+      linksText: z.string().optional(), // Shown only when the website/social field was filled in
+      nextTitle: z.string().optional(),
+      nextSteps: z.array(z.string()).optional(),
+      primaryButton: sharedButton.optional(),
+      secondaryButton: sharedButton.optional(),
+      resetLabel: z.string().optional(),
+    })
+    .optional(),
 });
 
 // Fields shared by most sections
@@ -216,6 +230,7 @@ export const processSectionSchema = baseSectionSchema
 export const contactSectionSchema = baseSectionSchema
   .extend({
     note: z.string().optional(),
+    secondaryNote: z.string().optional(), // Second reassurance line under the note
     form: contactFormSchema.optional(),
   })
   .optional();
