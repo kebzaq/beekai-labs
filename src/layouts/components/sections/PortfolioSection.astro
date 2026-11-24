@@ -21,7 +21,12 @@ const {
   title,
   description,
   allLabel = "All",
-  options: { featuredOnly = false, limit = false, grouped = false } = {},
+  options: {
+    featuredOnly = false,
+    limit = false,
+    grouped = false,
+    highlightFirst = false,
+  } = {},
   button,
 } = await getSectionContent<PortfolioContent>(
   "portfolio-section",
@@ -66,7 +71,7 @@ if (!enable) {
   <div class="container space-y-12">
     <SectionHeader title={title} description={description} />
 
-    <div class="space-y-10" data-filter-root>
+    <div class="space-y-10" data-filter-root data-reveal>
       <FilterTabs
         tabs={categories}
         allLabel={allLabel}
@@ -88,10 +93,23 @@ if (!enable) {
             ))}
           </div>
         ) : (
-          <div class={gridClass}>
-            {projects.map((project) => (
-              <PortfolioCard content={project} />
-            ))}
+          <div
+            class={
+              highlightFirst
+                ? "grid grid-cols-1 gap-8 md:grid-cols-2"
+                : gridClass
+            }>
+            {projects.map((project, index) => {
+              // highlightFirst: the first project gets a full-width card, the rest two per row
+              const isHighlighted = highlightFirst && index === 0;
+              return (
+                <PortfolioCard
+                  content={project}
+                  featured={isHighlighted}
+                  class={isHighlighted ? "md:col-span-2" : ""}
+                />
+              );
+            })}
           </div>
         )
       }

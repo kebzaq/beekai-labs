@@ -110,6 +110,7 @@ export const contactFormSchema = z.object({
 export const baseSectionSchema = z
   .object({
     enable: z.boolean(),
+    eyebrow: z.string(), // Small label above the title. A section with an eyebrow has no accent underline.
     title: z.string(),
     description: z.string(),
     button: sharedButton,
@@ -122,23 +123,58 @@ export const bannerAgencySectionSchema = baseSectionSchema
     image: z.string().optional(),
     secondaryButton: sharedButton.optional(),
     note: z.string().optional(),
+    mockup: z
+      .object({
+        url: z.string(),
+        siteName: z.string(),
+        siteNav: z.array(z.string()),
+        sitePhone: z.string(),
+        siteCallButton: z.string(),
+        siteHeadline: z.string(),
+        siteSubtitle: z.string(),
+        siteButton: z.string(),
+        siteRating: z.string(),
+        siteServices: z.array(z.object({ name: z.string(), detail: z.string() })),
+        chatLabel: z.string(),
+        chatText: z.string(),
+        notificationTitle: z.string(),
+        notificationText: z.string(),
+      })
+      .partial()
+      .optional(),
   })
-  .optional();
-
-export const industriesSectionSchema = baseSectionSchema
-  .extend({ cardLinkLabel: z.string().optional() })
   .optional();
 
 export const toolsSectionSchema = baseSectionSchema.optional();
 
-export const whyUsSectionSchema = baseSectionSchema.optional();
+export const whyUsSectionSchema = baseSectionSchema
+  .extend({
+    limit: z.number().int().optional(),
+    founder: z
+      .object({
+        enable: z.boolean(),
+        name: z.string(),
+        role: z.string(),
+        text: z.string(),
+        image: z.string(),
+      })
+      .partial()
+      .optional(),
+  })
+  .optional();
 
 export const industryDetailsSectionSchema = baseSectionSchema
-  .extend({ blockLinkLabel: z.string().optional() })
+  .extend({
+    blockLinkLabel: z.string().optional(),
+    solutionsLimit: z.number().int().optional(), // Show only the first few bullets per industry
+  })
   .optional();
 
 export const servicesSectionSchema = baseSectionSchema
-  .extend({ cardLinkLabel: z.string().optional() })
+  .extend({
+    cardLinkLabel: z.string().optional(),
+    featuredGroup: z.string().optional(),
+  })
   .optional();
 
 export const statsSectionSchema = baseSectionSchema.optional();
@@ -151,6 +187,7 @@ export const portfolioSectionSchema = baseSectionSchema
         featuredOnly: z.boolean(),
         limit: z.union([z.number().int(), z.literal(false)]),
         grouped: z.boolean(),
+        highlightFirst: z.boolean(),
       })
       .partial()
       .optional(),
@@ -164,14 +201,17 @@ export const testimonialsSectionSchema = baseSectionSchema
         z.object({
           quote: z.string(),
           name: z.string(),
-          role: z.string().optional(),
+          business: z.string().optional(),
+          image: z.string().optional(), // Photo in src/assets/images
         }),
       )
       .optional(),
   })
   .optional();
 
-export const processSectionSchema = baseSectionSchema.optional();
+export const processSectionSchema = baseSectionSchema
+  .extend({ appearance: AppearanceEnum.optional() })
+  .optional();
 
 export const contactSectionSchema = baseSectionSchema
   .extend({
@@ -180,7 +220,9 @@ export const contactSectionSchema = baseSectionSchema
   })
   .optional();
 
-export const ctaSectionSchema = baseSectionSchema.optional();
+export const ctaSectionSchema = baseSectionSchema
+  .extend({ note: z.string().optional() }) // Small reassurance line under the button
+  .optional();
 
 export const pricingSectionSchema = baseSectionSchema
   .extend({ popularLabel: z.string().optional() })
@@ -252,7 +294,6 @@ export const faqSectionSchema = baseSectionSchema.optional();
 
 export const sectionsSchema = {
   bannerAgencySection: bannerAgencySectionSchema,
-  industriesSection: industriesSectionSchema,
   toolsSection: toolsSectionSchema,
   whyUsSection: whyUsSectionSchema,
   industryDetailsSection: industryDetailsSectionSchema,

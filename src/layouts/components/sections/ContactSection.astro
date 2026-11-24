@@ -1,10 +1,12 @@
 ---
+// Contact details list disabled for now (see below). Uncomment these imports to restore it.
+// import { ready } from "@/lib/utils/todo";
 import type { z } from "astro/zod";
-import config from ".astro/config.generated.json";
+// import config from ".astro/config.generated.json";
 import Icons from "@/helpers/Icons.astro";
 import { getSectionContent } from "@/lib/contentParser.astro";
-import { markdownify } from "@/lib/utils/textConverter";
-import { useTranslations } from "@/lib/utils/i18nUtils";
+// import { markdownify } from "@/lib/utils/textConverter";
+// import { useTranslations } from "@/lib/utils/i18nUtils";
 import type { contactSectionSchema } from "@/sections.schema";
 import ContactForm from "@/components/widgets/ContactForm.astro";
 import SectionHeader from "@/components/widgets/SectionHeader.astro";
@@ -17,6 +19,7 @@ type Props = {
 
 const {
   enable = true,
+  eyebrow,
   title,
   description,
   note,
@@ -27,14 +30,16 @@ const {
   Astro.currentLocale,
 );
 
-const t = await useTranslations(Astro.currentLocale as string);
-const { email, phone, serviceArea } = config.settings.contactInfo;
-
-const contactDetails = [
-  { icon: "Mail", label: t("common.emailLabel"), value: email },
-  { icon: "Phone", label: t("common.phoneLabel"), value: phone },
-  { icon: "MapPin", label: t("common.serviceAreaLabel"), value: serviceArea },
-].filter((item) => item.value);
+// Contact details list (email, phone, service area) disabled for now.
+// To restore it, uncomment this block, the imports above and the list in the markup below.
+// const t = await useTranslations(Astro.currentLocale as string);
+// const { email, phone, serviceArea } = config.settings.contactInfo;
+//
+// const contactDetails = [
+//   { icon: "Mail", label: t("common.emailLabel"), value: email },
+//   { icon: "Phone", label: t("common.phoneLabel"), value: phone },
+//   { icon: "MapPin", label: t("common.serviceAreaLabel"), value: serviceArea },
+// ].filter((item) => ready(item.value)); // Placeholders stay out of the live site
 
 if (!enable) {
   return null;
@@ -45,7 +50,12 @@ if (!enable) {
   <div class="container">
     <div class="grid grid-cols-1 gap-x-20 gap-y-12 lg:grid-cols-2">
       <div class="space-y-8">
-        <SectionHeader title={title} description={description} align="left" />
+        <SectionHeader
+          eyebrow={eyebrow}
+          title={title}
+          description={description}
+          align="left"
+        />
         {
           note && (
             <div class="font-secondary text-dark flex items-center gap-3 font-medium">
@@ -58,6 +68,7 @@ if (!enable) {
             </div>
           )
         }
+        {/* Contact details list (email, phone, service area) disabled for now. Restore with the code fence above.
         <ul class="prose-a:hover:text-accent-hover space-y-3">
           {
             contactDetails.map((item) => (
@@ -73,6 +84,7 @@ if (!enable) {
             ))
           }
         </ul>
+        */}
       </div>
       {form && <ContactForm form={form} />}
     </div>

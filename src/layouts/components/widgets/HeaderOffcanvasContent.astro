@@ -1,4 +1,5 @@
 ---
+import { ready } from "@/lib/utils/todo";
 import social from "@/config/social.json";
 import Icons from "@/helpers/Icons.astro";
 import config from ".astro/config.generated.json";
@@ -55,8 +56,8 @@ if (!enable) {
 
   <div
     class="prose-a:hover:text-accent prose-a:text-light font-secondary text-sm/loose uppercase">
-    {phone && <p set:html={markdownify(phone)} />}
-    {email && <p set:html={markdownify(email)} />}
+    {ready(phone) && <p set:html={markdownify(phone)} />}
+    {ready(email) && <p set:html={markdownify(email)} />}
     {serviceArea && <p set:html={markdownify(serviceArea)} />}
   </div>
 

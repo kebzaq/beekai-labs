@@ -5,7 +5,7 @@ categories: []
 draft: false
 ---
 
-**[TODO: review] This page is a placeholder. Replace it with a reviewed privacy policy before launch.**
+<!-- TODO: review. This page is a placeholder. Replace it with a reviewed privacy policy before launch. -->
 
 ### What this page will cover
 

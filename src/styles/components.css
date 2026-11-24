@@ -379,6 +379,90 @@ footer {
   @apply bg-accent/25 pointer-events-none absolute start-1/2 h-96 w-96 -translate-x-1/2 rounded-full blur-3xl;
 }
 
+/* Honeycomb pattern in the homepage hero. It is concentrated behind the hero visual:
+   centered on small screens, toward the right on large screens where the visual sits.
+   Tweak the strength with the opacity classes and the cell size with background-size
+   (keep the 80:138 width-to-height ratio so the hexagons stay regular). */
+.honeycomb-pattern {
+  @apply pointer-events-none absolute inset-0 opacity-40 sm:opacity-70;
+  background-image: url("/honeycomb.svg");
+  background-size: 80px 138px;
+  background-position: center;
+  mask-image: radial-gradient(circle at 50% 70%, black 10%, transparent 60%);
+
+  @variant lg {
+    mask-image: radial-gradient(circle at 75% 50%, black 10%, transparent 60%);
+  }
+}
+
+/* Scroll-in fade-up for elements with [data-reveal].
+   GlobalScripts adds .is-visible when they scroll into view; --reveal-delay staggers grid items.
+   Nothing is hidden without JavaScript or for visitors who prefer reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .js-reveal [data-reveal] {
+    opacity: 0;
+    translate: 0 1.5rem;
+    transition:
+      opacity 0.6s ease-out,
+      translate 0.6s ease-out;
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .js-reveal [data-reveal].is-visible {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* Card on a light section: warm off-white, subtle border, lifts on hover */
+.card-soft {
+  @apply bg-card-soft border-border-light hover:border-accent/50 border transition duration-300 hover:-translate-y-1 hover:shadow-lg motion-reduce:transition-none motion-reduce:hover:translate-y-0;
+}
+
+/* Logo strip: gray logos that take on their brand color (--brand) on hover */
+.logo-strip-item {
+  .logo-strip-mark {
+    @apply opacity-60 grayscale transition duration-300;
+  }
+
+  &:hover .logo-strip-mark {
+    @apply opacity-100 grayscale-0;
+    color: var(--brand, currentColor);
+  }
+}
+
+/* Headline phrase with the light fill and a thin brand-orange outline (the honeycomb line color),
+   plus a very faint orange glow. The outline is drawn behind the fill, which covers its inner half,
+   so a 2px / 3px stroke shows as about 1px on small screens and 1.5px from sm up. */
+.text-outline-accent {
+  paint-order: stroke fill;
+  -webkit-text-stroke: 2px var(--color-accent);
+  text-shadow: 0 0 24px --alpha(var(--color-accent) / 25%);
+
+  @variant sm {
+    -webkit-text-stroke-width: 3px;
+  }
+}
+
+/* Homepage hero visual (mockup + floating cards + glowing cells): full size on phones,
+   88% on tablets and wide screens (370px / 458px wide), and 80% on small laptops (lg),
+   where the two hero columns are narrower.
+   zoom scales the layout itself, so text stays crisp (unlike transform: scale).
+   Change the values to resize everything inside proportionally. */
+.hero-visual-zoom {
+  @variant md {
+    zoom: 0.88;
+  }
+
+  @variant lg {
+    zoom: 0.8;
+  }
+
+  @variant xl {
+    zoom: 0.88;
+  }
+}
+
 /* Small status badge */
 .status-badge {
   @apply font-secondary text-dark border-accent inline-block border px-2.5 py-1 text-xs uppercase;

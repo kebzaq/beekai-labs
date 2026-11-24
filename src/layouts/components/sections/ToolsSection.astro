@@ -3,6 +3,7 @@ import type { z } from "astro/zod";
 import { getSectionContent } from "@/lib/contentParser.astro";
 import { getTools } from "@/lib/utils/siteData";
 import type { toolsSectionSchema } from "@/sections.schema";
+import OptimizedImage from "@/components/utilities/OptimizedImage.astro";
 
 type ToolsContent = NonNullable<z.infer<typeof toolsSectionSchema>>;
 
@@ -16,7 +17,7 @@ const { enable = true, title } = await getSectionContent<ToolsContent>(
   Astro.currentLocale,
 );
 
-// Tool names come from src/content/data/tools.yml
+// Names, logos and brand colors come from src/content/data/tools.yml
 const tools = await getTools();
 
 if (!enable || tools.length === 0) {
@@ -24,14 +25,35 @@ if (!enable || tools.length === 0) {
 }
 ---
 
-<section id="tools">
+<!-- A thin strip right under the hero, so it uses a smaller top gap than full sections -->
+<section id="tools" class="pt-12 md:pt-16">
   <div class="container">
     <div
       class="border-border-light flex flex-col items-center gap-6 border-y py-8 lg:flex-row lg:justify-between lg:gap-10">
       {title && <h2 class="text-h6 shrink-0">{title}</h2>}
       <ul
-        class="font-secondary flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm uppercase">
-        {tools.map((tool) => <li>{tool.data.name}</li>)}
+        class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 lg:justify-end">
+        {
+          tools.map((tool) => (
+            <li
+              class="logo-strip-item text-text-default flex items-center gap-2.5 text-sm font-medium"
+              style={tool.data.color ? `--brand: ${tool.data.color}` : undefined}>
+              {tool.data.logo && (
+                <span class="logo-strip-mark inline-flex size-7 shrink-0 items-center">
+                  <OptimizedImage
+                    src={tool.data.logo}
+                    inlineSvg
+                    class="size-full"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    focusable="false"
+                  />
+                </span>
+              )}
+              {tool.data.name}
+            </li>
+          ))
+        }
       </ul>
     </div>
   </div>

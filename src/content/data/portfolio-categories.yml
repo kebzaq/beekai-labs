@@ -4,12 +4,9 @@
 - id: websites
   order: 1
   title: Websites
-- id: automation
+- id: ai-automation
   order: 2
-  title: Automation & Integrations
-- id: ai-tools
-  order: 3
-  title: AI Tools
+  title: AI & Automation
 - id: consulting
-  order: 4
+  order: 3
   title: Consulting

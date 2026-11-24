@@ -1,0 +1,229 @@
+---
+/**
+ * Browser-window mockup for the homepage hero, with two floating cards
+ * (an AI receptionist chat bubble and a booking notification).
+ *
+ * Pass `image` (a path in src/assets/images, for example "/images/banner/client-site.jpg")
+ * to show a real screenshot. Without it a sample local business homepage (photos + CSS) is shown.
+ * The whole mockup is decorative, so it is hidden from screen readers.
+ */
+import { Image } from "astro:assets";
+import Icons from "@/helpers/Icons.astro";
+import OptimizedImage from "@/components/utilities/OptimizedImage.astro";
+
+/*
+ * Sample business photos (free under the Unsplash License, https://unsplash.com/license),
+ * resized and saved as WebP in src/assets/hero-mockup:
+ * - hero-technician.webp: Joel Muniz (@jmuniz), https://unsplash.com/photos/technician-servicing-outdoor-air-conditioning-unit-L5sEqpQukJI
+ * - service-furnace-repair.webp: Immo Wegmann (@tinkerman), https://unsplash.com/photos/a-room-with-a-bunch-of-pipes-and-gauges-2nsQWyPU6tw
+ * - service-ac-installation.webp: alpha innotec (@alpha_innotec), https://unsplash.com/photos/outdoor-heat-pump-unit-next-to-a-brick-building-4VCm8l6wLQY
+ * - service-maintenance-plans.webp: HUUM (@huumsauna), https://unsplash.com/photos/finger-adjusting-a-modern-digital-thermostat-on-wall-3_nf1qKJGf4
+ */
+import heroPhoto from "@/assets/hero-mockup/hero-technician.webp";
+import furnacePhoto from "@/assets/hero-mockup/service-furnace-repair.webp";
+import acPhoto from "@/assets/hero-mockup/service-ac-installation.webp";
+import maintenancePhoto from "@/assets/hero-mockup/service-maintenance-plans.webp";
+
+const servicePhotos = [furnacePhoto, acPhoto, maintenancePhoto];
+
+interface Props {
+  image?: string;
+  url?: string;
+  siteName?: string;
+  siteNav?: string[];
+  sitePhone?: string;
+  siteCallButton?: string;
+  siteHeadline?: string;
+  siteSubtitle?: string;
+  siteButton?: string;
+  siteRating?: string;
+  siteServices?: { name: string; detail: string }[];
+  chatLabel?: string;
+  chatText?: string;
+  notificationTitle?: string;
+  notificationText?: string;
+  class?: string;
+}
+
+const {
+  image,
+  url = "northsideheating.com",
+  siteName = "Northside Heating & Air",
+  siteNav = ["Services", "Reviews", "Contact"],
+  sitePhone = "(315) 555-0142",
+  siteCallButton = "Call now",
+  siteHeadline = "Fast, honest heating & AC repair",
+  siteSubtitle = "Same-day service across Central NY",
+  siteButton = "Book a visit",
+  siteRating = "4.9 · 200+ Google reviews",
+  siteServices = [
+    { name: "Furnace Repair", detail: "Same-day service" },
+    { name: "AC Installation", detail: "Free estimates" },
+    { name: "Maintenance Plans", detail: "from $89/yr" },
+  ],
+  chatLabel = "AI receptionist",
+  chatText = "Booked: Tue 3:00 PM — Furnace tune-up",
+  notificationTitle = "New service request",
+  notificationText = "Furnace repair · 2 min ago",
+  class: className,
+} = Astro.props;
+
+// Lit-up honeycomb cells around the mockup: position, size and strength
+const cells = [
+  { class: "-top-6 left-1/4 size-10 opacity-90", delayed: false },
+  { class: "-top-10 left-1/3 size-6 opacity-50 max-sm:hidden", delayed: true },
+  { class: "top-1/3 -right-5 size-12 opacity-80 max-sm:hidden", delayed: true },
+  { class: "-bottom-8 right-1/4 size-11 opacity-70", delayed: false },
+  { class: "bottom-1/4 -left-6 size-8 opacity-60 max-sm:hidden", delayed: true },
+];
+---
+
+<div class:list={["relative", className]} aria-hidden="true">
+  {
+    cells.map((cell) => (
+      <svg
+        viewBox="0 0 100 115.47"
+        class:list={[
+          "fill-accent drop-shadow-accent/60 pointer-events-none absolute drop-shadow-lg motion-reduce:animate-none",
+          cell.delayed ? "animate-glow-delayed" : "animate-glow",
+          cell.class,
+        ]}>
+        <polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87" />
+      </svg>
+    ))
+  }
+
+  <!-- Browser window -->
+  <div
+    class="relative overflow-hidden rounded-xl border border-white/10 bg-white shadow-2xl shadow-black/50">
+    <div class="bg-theme-dark flex items-center gap-3 px-3 py-2.5">
+      <div class="flex gap-1.5">
+        <span class="size-2 rounded-full bg-white/30"></span>
+        <span class="size-2 rounded-full bg-white/30"></span>
+        <span class="size-2 rounded-full bg-white/30"></span>
+      </div>
+      <span
+        class="mx-auto w-1/2 truncate rounded-md bg-white/10 px-3 py-0.5 text-center text-xs text-white/70">
+        {url}
+      </span>
+    </div>
+
+    <!-- Real screenshot when `image` is set, otherwise a sample client site:
+         a made-up local business in its own colors (demo-* tokens in theme.css) -->
+    {
+      image ? (
+        <OptimizedImage
+          src={image}
+          alt=""
+          width={960}
+          height={600}
+          loading="eager"
+          class="aspect-16/10 w-full object-cover object-top"
+        />
+      ) : (
+        <div class="bg-demo-page text-demo-ink space-y-2.5 p-3 sm:space-y-3 sm:p-4">
+          {/* Site header */}
+          <div class="flex items-center justify-between gap-3">
+            <span class="flex items-center gap-1.5">
+              <span class="bg-demo-ink flex size-5 items-center justify-center gap-px rounded-md sm:size-6">
+                <Icons icon="Flame" class="text-demo-accent size-2.5" />
+                <Icons icon="Snowflake" class="size-2.5 text-sky-300" />
+              </span>
+              <span class="text-2xs leading-tight font-bold">{siteName}</span>
+            </span>
+            <span class="text-3xs flex items-center gap-2.5">
+              {siteNav.map((link) => (
+                <span class="max-lg:hidden">{link}</span>
+              ))}
+              <span class="flex items-center gap-1 font-semibold">
+                <Icons icon="Phone" class="size-2.5" />
+                {sitePhone}
+              </span>
+              <span class="bg-demo-accent rounded-md px-2 py-0.5 font-semibold text-white max-sm:hidden">
+                {siteCallButton}
+              </span>
+            </span>
+          </div>
+
+          {/* Site hero */}
+          <div class="bg-demo-surface grid grid-cols-5 items-center gap-3 rounded-lg p-2.5 sm:p-3">
+            <div class="col-span-3 space-y-1.5 sm:space-y-2">
+              <span class="block text-sm leading-tight font-bold sm:text-lg">
+                {siteHeadline}
+              </span>
+              <span class="text-3xs sm:text-2xs block opacity-75">{siteSubtitle}</span>
+              <span class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span class="bg-demo-accent text-3xs sm:text-2xs rounded-md px-2.5 py-1 font-semibold text-white shadow-sm">
+                  {siteButton}
+                </span>
+                <span class="text-3xs">
+                  <span class="text-amber-500">★</span> {siteRating}
+                </span>
+              </span>
+            </div>
+            <Image
+              src={heroPhoto}
+              alt=""
+              width={400}
+              loading="eager"
+              class="col-span-2 aspect-5/4 w-full rounded-md object-cover shadow-sm"
+            />
+          </div>
+
+          {/* Service cards */}
+          <div class="grid grid-cols-3 gap-2 sm:gap-2.5">
+            {siteServices.slice(0, 3).map((service, index) => (
+              <div class="overflow-hidden rounded-md bg-white shadow-sm">
+                <Image
+                  src={servicePhotos[index % servicePhotos.length]}
+                  alt=""
+                  width={320}
+                  loading="eager"
+                  class="aspect-3/2 w-full object-cover"
+                />
+                <div class="px-1.5 py-1 sm:px-2 sm:py-1.5">
+                  <span class="text-3xs sm:text-2xs block leading-tight font-semibold">
+                    {service.name}
+                  </span>
+                  <span class="text-3xs block opacity-70">{service.detail}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </div>
+
+  <!-- Booking notification, top right -->
+  <div
+    class="animate-float-delayed text-dark absolute top-48 -right-2 flex max-w-60 items-center gap-2.5 rounded-lg bg-white px-3 py-2.5 shadow-xl motion-reduce:animate-none sm:top-24 sm:-right-4 md:-right-16 lg:-right-4">
+    <span
+      class="bg-theme-light text-text-default relative inline-flex size-7 shrink-0 items-center justify-center rounded-full">
+      <Icons icon="BellRing" class="size-3.5" />
+      <span class="bg-accent absolute -top-0.5 -right-0.5 size-2 rounded-full ring-2 ring-white"></span>
+    </span>
+    <span class="leading-snug">
+      <span class="font-secondary block text-xs font-semibold whitespace-nowrap sm:text-sm">
+        {notificationTitle}
+      </span>
+      <span class="block text-xs opacity-70">{notificationText}</span>
+    </span>
+  </div>
+
+  <!-- AI receptionist chat bubble, bottom left -->
+  <div
+    class="animate-float text-dark absolute -bottom-18 -left-2 flex max-w-60 items-center gap-2.5 rounded-lg rounded-bl-none bg-white px-3 py-2.5 shadow-xl motion-reduce:animate-none sm:-bottom-14 sm:-left-5 md:-left-16 lg:-left-5">
+    <span
+      class="bg-theme-light text-text-default inline-flex size-7 shrink-0 items-center justify-center rounded-full">
+      <Icons icon="Bot" class="size-4" />
+    </span>
+    <span class="leading-snug">
+      <span class="font-secondary block text-sm font-semibold">{chatLabel}</span>
+      <span class="flex items-start gap-1 text-xs">
+        <Icons icon="Check" class="text-accent-hover mt-px size-3.5 shrink-0" />
+        {chatText}
+      </span>
+    </span>
+  </div>
+</div>

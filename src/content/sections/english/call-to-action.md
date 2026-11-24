@@ -7,6 +7,8 @@ description: ""
 button:
   # Refer to sharedButton in src/sections.schema.ts for all options.
   enable: true
-  label: "Contact Us"
+  label: "Get a Free Preview"
   url: "/contact/"
+
+note: "No contracts, no pressure. Just a look at what's possible." # Small reassurance line under the button
 ---

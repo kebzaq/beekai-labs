@@ -1,9 +1,11 @@
 ---
 import type { z } from "astro/zod";
 import config from ".astro/config.generated.json";
+import Icons from "@/helpers/Icons.astro";
 import { getSectionContent } from "@/lib/contentParser.astro";
 import type { testimonialsSectionSchema } from "@/sections.schema";
 import SectionHeader from "@/components/widgets/SectionHeader.astro";
+import OptimizedImage from "@/components/utilities/OptimizedImage.astro";
 
 type TestimonialsContent = NonNullable<
   z.infer<typeof testimonialsSectionSchema>
@@ -15,13 +17,24 @@ type Props = {
 
 const {
   enable = true,
+  eyebrow,
   title,
+  description,
   list = [],
 } = await getSectionContent<TestimonialsContent>(
   "testimonials-section",
   Astro.props.content,
   Astro.currentLocale,
 );
+
+// Initials for the avatar when there is no photo
+const initials = (name: string) =>
+  name
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
 // Hidden until `showTestimonials = true` in src/config/config.toml and there is at least one real quote
 if (!enable || !config.settings.showTestimonials || list.length === 0) {
@@ -31,18 +44,37 @@ if (!enable || !config.settings.showTestimonials || list.length === 0) {
 
 <section id="testimonials">
   <div class="container space-y-14">
-    <SectionHeader title={title} />
-    <ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <SectionHeader eyebrow={eyebrow} title={title} description={description} />
+    <ul class="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-2">
       {
         list.map((item) => (
-          <li>
-            <figure class="bg-theme-light flex h-full flex-col gap-6 p-8">
-              <blockquote class="text-lg">{item.quote}</blockquote>
-              <figcaption class="mt-auto">
-                <span class="font-secondary text-dark block font-semibold">
-                  {item.name}
+          <li data-reveal>
+            <figure class="card-soft flex h-full flex-col gap-6 p-8">
+              <Icons icon="Quote" class="text-accent size-8" aria-hidden="true" />
+              <blockquote class="text-dark text-lg">{item.quote}</blockquote>
+              <figcaption class="mt-auto flex items-center gap-4">
+                {item.image ? (
+                  <OptimizedImage
+                    src={item.image}
+                    alt=""
+                    width={96}
+                    height={96}
+                    loading="lazy"
+                    class="size-12 rounded-full object-cover"
+                  />
+                ) : (
+                  <span
+                    class="bg-accent-soft font-secondary text-dark flex size-12 items-center justify-center rounded-full text-sm font-semibold"
+                    aria-hidden="true">
+                    {initials(item.name)}
+                  </span>
+                )}
+                <span>
+                  <span class="font-secondary text-dark block font-semibold">
+                    {item.name}
+                  </span>
+                  {item.business && <span class="text-sm">{item.business}</span>}
                 </span>
-                {item.role && <span class="text-sm">{item.role}</span>}
               </figcaption>
             </figure>
           </li>

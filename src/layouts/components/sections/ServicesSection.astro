@@ -1,7 +1,9 @@
 ---
 import type { z } from "astro/zod";
+import Icons from "@/helpers/Icons.astro";
 import { getSectionContent } from "@/lib/contentParser.astro";
-import { getServiceGroups } from "@/lib/utils/siteData";
+import { getServiceGroups, getServicesByGroup } from "@/lib/utils/siteData";
+import { getLocaleUrlCTM } from "@/lib/utils/i18nUtils";
 import type { servicesSectionSchema } from "@/sections.schema";
 import FeatureCard from "@/components/cards/FeatureCard.astro";
 import SectionHeader from "@/components/widgets/SectionHeader.astro";
@@ -14,9 +16,11 @@ type Props = {
 
 const {
   enable = true,
+  eyebrow,
   title,
   description,
   cardLinkLabel,
+  featuredGroup,
 } = await getSectionContent<ServicesContent>(
   "services-section",
   Astro.props.content,
@@ -26,6 +30,13 @@ const {
 // Cards come from src/content/data/service-groups.yml
 const groups = await getServiceGroups();
 
+// Bento layout: the featured group gets a large card, the others fill in around it
+const featured = groups.find((group) => group.id === featuredGroup);
+const others = groups.filter((group) => group !== featured);
+const featuredServices = featured
+  ? (await getServicesByGroup(featured.id)).slice(0, 4)
+  : [];
+
 if (!enable) {
   return null;
 }
@@ -34,11 +45,56 @@ if (!enable) {
 <section id="services">
   <div class="bg-theme-light py-20 md:py-32">
     <div class="container space-y-14">
-      <SectionHeader title={title} description={description} />
-      <ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <SectionHeader
+        eyebrow={eyebrow}
+        title={title}
+        description={description}
+      />
+      <ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {
-          groups.map((group, index) => (
-            <li data-aos="fade-up" data-aos-delay={(index % 3) * 100}>
+          featured && (
+            <li class="sm:col-span-2 lg:row-span-2" data-reveal>
+              <div class="bg-theme-darker text-light relative flex h-full flex-col gap-6 overflow-hidden p-8 md:p-10">
+                <div class="accent-glow -end-40 -bottom-64 start-auto translate-x-0" aria-hidden="true" />
+                <span class="bg-accent-soft text-accent-light relative inline-flex size-16 items-center justify-center">
+                  <Icons icon={featured.data.icon as any} class="size-8" aria-hidden="true" />
+                </span>
+                <h3 class="text-h4-sm md:text-h4 text-light relative">
+                  {featured.data.title}
+                </h3>
+                <p class="relative max-w-xl text-lg opacity-80">
+                  {featured.data.intro}
+                </p>
+                {featuredServices.length > 0 && (
+                  <ul class="relative grid gap-3 sm:grid-cols-2">
+                    {featuredServices.map((service) => (
+                      <li class="flex items-start gap-3">
+                        <Icons
+                          icon="Check"
+                          class="text-accent-light mt-1 size-5 shrink-0"
+                          aria-hidden="true"
+                        />
+                        <span>{service.data.title}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {cardLinkLabel && (
+                  <a
+                    href={getLocaleUrlCTM(`/services/#${featured.id}`, Astro.currentLocale)}
+                    class="font-secondary text-light hover:text-accent relative mt-auto inline-flex items-center gap-2 pt-2 text-sm uppercase">
+                    {cardLinkLabel}
+                    <span class="sr-only">: {featured.data.title}</span>
+                    <Icons icon="ArrowRight" class="size-4" aria-hidden="true" />
+                  </a>
+                )}
+              </div>
+            </li>
+          )
+        }
+        {
+          others.map((group) => (
+            <li data-reveal>
               <FeatureCard
                 icon={group.data.icon}
                 title={group.data.title}

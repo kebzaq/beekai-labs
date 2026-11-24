@@ -1,0 +1,80 @@
+---
+/**
+ * Short personal note from the founder, with a round photo.
+ * Until the photo file exists in src/assets/images, a placeholder circle is shown.
+ */
+import Icons from "@/helpers/Icons.astro";
+import { markdownify } from "@/lib/utils/textConverter";
+import { ready } from "@/lib/utils/todo";
+import OptimizedImage from "@/components/utilities/OptimizedImage.astro";
+
+interface Props {
+  name?: string;
+  role?: string;
+  text?: string;
+  image?: string;
+  appearance?: "light" | "dark";
+  class?: string;
+}
+
+const {
+  role,
+  text,
+  image,
+  appearance = "dark",
+  class: className,
+} = Astro.props;
+const name = ready(Astro.props.name);
+
+// Only use the photo when the file is really there
+const images = import.meta.glob("/src/assets/images/**/*.{jpeg,jpg,png,webp}");
+const hasImage = !!image && !!images[`/src/assets${image}`];
+const isDark = appearance === "dark";
+---
+
+{
+  text && (
+    <figure
+      class:list={[
+        "flex items-start gap-5 border-s-4 border-accent p-6",
+        isDark ? "text-light bg-white/5" : "bg-theme-light",
+        className,
+      ]}>
+      {hasImage ? (
+        <OptimizedImage
+          src={image as string}
+          alt={name || ""}
+          width={128}
+          height={128}
+          loading="lazy"
+          class="size-16 shrink-0 rounded-full object-cover"
+        />
+      ) : (
+        <span
+          class="bg-accent-soft text-accent-light flex size-16 shrink-0 items-center justify-center rounded-full"
+          aria-hidden="true">
+          <Icons icon="UserRound" class="size-7" />
+        </span>
+      )}
+      <div class="space-y-3">
+        <blockquote>
+          <p class:list={[!isDark && "text-dark"]} set:html={markdownify(text)} />
+        </blockquote>
+        {(name || role) && (
+          <figcaption class="text-sm">
+            {name && (
+              <span
+                class:list={[
+                  "font-secondary block font-semibold",
+                  isDark ? "text-light" : "text-dark",
+                ]}>
+                {name}
+              </span>
+            )}
+            {role && <span class="opacity-80">{role}</span>}
+          </figcaption>
+        )}
+      </div>
+    </figure>
+  )
+}

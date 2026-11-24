@@ -13,8 +13,10 @@ type Props = {
 
 const {
   enable = true,
+  eyebrow,
   title,
   description,
+  appearance = "dark",
 } = await getSectionContent<ProcessContent>(
   "process-section",
   Astro.props.content,
@@ -24,30 +26,47 @@ const {
 // Steps come from src/content/data/process.yml
 const steps = await getProcessSteps();
 
+const isDark = appearance === "dark";
+
 if (!enable) {
   return null;
 }
 ---
 
 <section id="process">
-  <div class="bg-theme-darker text-light py-20 md:py-32">
+  <div class:list={[isDark && "bg-theme-darker text-light py-20 md:py-32"]}>
     <div class="container space-y-14">
       <SectionHeader
+        eyebrow={eyebrow}
         title={title}
         description={description}
-        appearance="dark"
+        appearance={appearance}
       />
-      <ol class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5">
+      <!-- Timeline: vertical on small screens, horizontal from lg -->
+      <ol class="grid grid-cols-1 gap-10 lg:grid-cols-5 lg:gap-8">
         {
           steps.map((step, index) => (
-            <li class="space-y-3 border-t border-white/15 pt-6">
+            <li class="relative flex gap-6 lg:flex-col lg:gap-6" data-reveal>
+              {index < steps.length - 1 && (
+                <span
+                  class="bg-accent/40 absolute start-7 top-14 -bottom-10 w-px lg:start-14 lg:-end-8 lg:top-7 lg:bottom-auto lg:h-px lg:w-auto"
+                  aria-hidden="true"
+                />
+              )}
               <span
-                class="font-secondary text-accent text-h4 block font-bold"
+                class:list={[
+                  "font-secondary border-accent relative flex size-14 shrink-0 items-center justify-center rounded-full border-2 font-bold",
+                  isDark ? "text-accent-light" : "bg-accent-soft text-dark",
+                ]}
                 aria-hidden="true">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <h3 class="text-h6 text-light">{step.data.title}</h3>
-              <p class="opacity-80">{step.data.description}</p>
+              <div class="space-y-2 pt-3 lg:pt-0">
+                <h3 class:list={["text-h6", isDark && "text-light"]}>
+                  {step.data.title}
+                </h3>
+                <p class="opacity-80">{step.data.description}</p>
+              </div>
             </li>
           ))
         }

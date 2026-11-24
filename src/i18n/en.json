@@ -43,6 +43,7 @@
     "addOnLabel": "Add-on",
     "priceLabel": "Price",
     "desktopScreenshot": "Desktop screenshot of",
+    "coverAltSuffix": "website shown on a laptop and phone",
     "mobileScreenshot": "Mobile screenshot of"
   },
   "headerOffcanvas": {
@@ -50,7 +51,8 @@
     "buttonLabel": "Contact Us"
   },
   "navigation": {
-    "buttonLabel": "Contact Us"
+    "buttonLabel": "<span class=\"lg:max-xl:hidden\">Get a </span>Free Preview",
+    "buttonLabelComment": "The header shows the shorter \"Free Preview\" between the lg and xl breakpoints (1024-1319px), where the full label would crowd the nav links. The mobile menu shows the full label."
   },
   "footer": {
     "description": "Websites, AI and automation for small businesses, nonprofits and public organizations.",

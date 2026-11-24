@@ -96,6 +96,7 @@
     email       = "[TODO: hello@ourdomain.com]" # TODO: real email address
     phone       = "[TODO: Google Voice number]" # TODO: real phone number, for example "[+1 315 555 0100](tel:+13155550100)"
     serviceArea = "Central NY · NYC · Remote" # TODO: confirm service area
+    footerServiceArea = "New York · USA · Serving clients worldwide" # Location line in the footer only (empty: uses serviceArea)
 
   # Header Offcanvas Configuration
   # Update social links in `src/config/social.json`

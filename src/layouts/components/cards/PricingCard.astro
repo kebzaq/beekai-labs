@@ -1,4 +1,5 @@
 ---
+import { ready } from "@/lib/utils/todo";
 import Icons from "@/helpers/Icons.astro";
 import { markdownify } from "@/lib/utils/textConverter";
 import CustomButton from "@/components/CustomButton.astro";
@@ -17,7 +18,10 @@ type Props = {
 };
 
 const { content, popularLabel, button, class: className } = Astro.props;
-const { name, price, timeline, popular, includes } = content;
+const { name, price, timeline, popular } = content;
+
+// Placeholder bullets ("[TODO: ...]") are shown in development only
+const includes = content.includes?.filter((item) => ready(item));
 ---
 
 <div

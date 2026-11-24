@@ -1,20 +1,34 @@
-# Tools we work with, shown as plain text in the homepage trust strip.
-# TODO: add icons if you want them. Do not add partner or certification badges unless confirmed.
+# Tools we work with, shown as a logo strip on the homepage.
+# Do not add partner or certification badges unless confirmed.
+#   logo:  optional SVG in src/assets/images/logos (single-color marks from https://simpleicons.org work best).
+#          Without a logo only the name is shown.
+#   color: the brand color the logo takes on hover (from Simple Icons). Logos are gray until hovered.
 - id: astro
   order: 1
   name: Astro
+  logo: /images/logos/astro.svg
+  color: "#BC52EE"
 - id: react
   order: 2
   name: React
+  logo: /images/logos/react.svg
+  color: "#61DAFB"
 - id: wix-studio
   order: 3
   name: Wix Studio
+  logo: /images/logos/wix.svg
+  color: "#0C6EFC"
 - id: google-business-profile
   order: 4
   name: Google Business Profile
+  logo: /images/logos/google.svg # Google's own mark; the Business Profile icon is not in Simple Icons
+  color: "#4285F4"
 - id: cloudflare
   order: 5
   name: Cloudflare
+  logo: /images/logos/cloudflare.svg
+  color: "#F38020"
 - id: web3forms
   order: 6
   name: Web3Forms
+  # TODO: add the official Web3Forms logo as src/assets/images/logos/web3forms.svg, then set `logo` and `color`

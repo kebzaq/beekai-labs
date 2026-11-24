@@ -7,6 +7,9 @@
   import SmoothScroll from "smoothscroll-for-websites";
 
   document.addEventListener("DOMContentLoaded", async () => {
+    // Scroll-in fade-up for [data-reveal] elements (first, so nothing stays hidden while other scripts load)
+    initReveal();
+
     await initLucide();
 
     // Dynamic Preline imports
@@ -37,6 +40,36 @@
     // Magnetic Hover Animation
     initMagneticHoverAnimation();
   });
+
+  // Scroll-in fade-up: adds .is-visible once an element enters the viewport.
+  // Items in the same list get a small stagger. Styles live in components.css.
+  function initReveal() {
+    const items = document.querySelectorAll("[data-reveal]");
+    if (!("IntersectionObserver" in window)) {
+      items.forEach((item) => item.classList.add("is-visible"));
+      return;
+    }
+
+    items.forEach((item) => {
+      const siblings = [...(item.parentElement?.children || [])].filter((el) =>
+        el.hasAttribute("data-reveal"),
+      );
+      const index = siblings.indexOf(item);
+      if (index > 0) item.style.setProperty("--reveal-delay", `${(index % 4) * 90}ms`);
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -10% 0px" },
+    );
+    items.forEach((item) => observer.observe(item));
+  }
 
   // Lucide Icons
   async function initLucide() {
