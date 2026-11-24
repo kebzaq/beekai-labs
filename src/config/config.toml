@@ -4,7 +4,7 @@
   description      = "Websites, AI and automation for small businesses, nonprofits and public organizations." # Shared description for SEO and OpenGraph
   tagline          = "Web · AI · Consulting"
   taglineSeparator = " | " # default is " - "
-  baseUrl          = "https://ourdomain.com" # TODO: replace with the real domain. Base URL for the site and used in OpenGraph meta tags.
+  baseUrl          = "https://beekai.netlify.app" # Production site on Netlify. Used as Astro's `site` (canonical links, sitemap, robots.txt) and in OpenGraph meta tags.
   # TODO: add a real logo. While `logo` and `logoAlternate` are empty, the header and footer show `logoText` as a text wordmark.
   logo             = "" # Path to the site's logo (for example "/images/logo.svg")
   logoAlternate    = "" # Path to the site's alternate logo for dark backgrounds

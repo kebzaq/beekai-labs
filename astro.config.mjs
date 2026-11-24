@@ -20,7 +20,8 @@ let {
 
 // https://astro.build/config
 export default defineConfig({
-  site: config.site.baseUrl ? config.site.baseUrl : "http://examplesite.com",
+  // Production site on Netlify. Set from `baseUrl` in src/config/config.toml.
+  site: config.site.baseUrl ? config.site.baseUrl : "https://beekai.netlify.app",
   trailingSlash: config.site.trailingSlash ? "always" : "never",
   // Load a page in the background when its link is hovered, so navigation feels instant
   prefetch: {

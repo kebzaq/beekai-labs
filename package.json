@@ -24,8 +24,7 @@
     "generate-favicons": "node ./scripts/generate-favicons.mjs",
     "remove-multilingual": "node ./scripts/remove-multilingual.mjs",
     "remove-draft-from-sitemap": "node ./scripts/remove-draft-from-sitemap.mjs",
-    "format": "prettier -w ./src",
-    "deploy:cf": "wrangler pages deploy"
+    "format": "prettier -w ./src"
   },
   "engines": {
     "node": ">=22.0.0"
