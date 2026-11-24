@@ -1,6 +1,7 @@
 ---
 # Contact section. Email, phone and service area come from `settings.contactInfo` in src/config/config.toml
 enable: true
+eyebrow: "Get in touch"
 title: "Tell us about your project"
 description: "Share a few details and we will come back with ideas and next steps."
 note: "We reply within 1 business day."

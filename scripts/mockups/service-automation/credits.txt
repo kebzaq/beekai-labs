@@ -1,0 +1,13 @@
+Service Request Automation: portfolio cover image
+=================================================
+Scene photo (scene-original.jpg, 3000x2001), free under the Pexels License
+(https://www.pexels.com/license/): free for commercial use, no attribution required.
+
+- "Minimalist Workspace with Laptop and Notebook" by Jakub Zerdzicki
+  https://www.pexels.com/photo/minimalist-workspace-with-laptop-and-notebook-34147402/
+  Photographer: https://www.pexels.com/@jakubzerdzicki/
+
+Screens (laptop.html, phone.html) are made for this mockup. The business is the sample
+"Northside Heating & Air" from the homepage hero; customers and jobs are sample data.
+No brand logos are shown. Font: Inter from Google Fonts (SIL Open Font License); the phone
+screen uses the system font.

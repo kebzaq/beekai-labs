@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Common Ground Community Center</title>
+<!-- Demo homepage for the Common Ground portfolio cover. Not part of the site build. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Lora:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1f4d3a;
+    --green-dark: #163a2b;
+    --cream: #faf6ee;
+    --cream-2: #f3ecdd;
+    --yellow: #f2b134;
+    --terracotta: #d9734e;
+    --ink: #1d2a24;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { font-family: "DM Sans", system-ui, sans-serif; color: var(--ink); background: var(--cream); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3 { font-family: "Lora", Georgia, serif; margin: 0; color: var(--green); }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 40px; }
+
+  /* Announcement bar */
+  .topbar { background: var(--green); color: var(--cream); font-size: 14px; text-align: center; padding: 10px 16px; }
+  .topbar strong { color: var(--yellow); font-weight: 700; }
+  .topbar a { text-decoration: underline; text-underline-offset: 3px; margin-left: 4px; }
+
+  /* Header */
+  header { background: var(--cream); border-bottom: 1px solid #e8dfcc; }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 76px; }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-mark { width: 40px; height: 40px; border-radius: 50%; background: var(--green); display: grid; place-items: center; }
+  .logo-text { font-family: "Lora", serif; font-weight: 700; font-size: 19px; line-height: 1.05; color: var(--green); }
+  .logo-text small { display: block; font-family: "DM Sans", sans-serif; font-weight: 500; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--terracotta); margin-top: 2px; }
+  .links { display: flex; align-items: center; gap: 32px; font-weight: 500; font-size: 15px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; border-radius: 999px; padding: 14px 26px; font-size: 16px; }
+  .btn-yellow { background: var(--yellow); color: var(--green-dark); }
+  .btn-green { background: var(--green); color: var(--cream); }
+  .btn-outline { border: 2px solid var(--green); color: var(--green); padding: 12px 24px; }
+  .btn-sm { padding: 10px 22px; font-size: 15px; }
+  .burger, .mobile-only { display: none; }
+
+  /* Hero */
+  .hero { padding: 86px 0 104px; }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 18px; }
+  .eyebrow::before { content: ""; width: 28px; height: 2px; background: var(--terracotta); }
+  .hero h1 { font-size: 58px; line-height: 1.08; letter-spacing: -.01em; }
+  .hero h1 em { color: var(--terracotta); }
+  .hero p { font-size: 19px; line-height: 1.6; color: #42514a; margin: 22px 0 32px; max-width: 520px; }
+  .actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .photo { position: relative; }
+  .photo img { display: block; width: 100%; aspect-ratio: 5/4.4; object-fit: cover; border-radius: 28px 28px 28px 120px; }
+  .photo::before { content: ""; position: absolute; inset: auto -18px -18px auto; width: 140px; height: 140px; border-radius: 50%; background: var(--yellow); z-index: -1; }
+  .badge { position: absolute; left: -28px; bottom: 36px; background: #fff; border-radius: 18px; padding: 14px 18px; display: flex; gap: 12px; align-items: center; box-shadow: 0 14px 34px rgba(31,77,58,.18); }
+  .badge-icon { width: 42px; height: 42px; border-radius: 12px; background: var(--cream-2); display: grid; place-items: center; }
+  .badge b { display: block; font-family: "Lora", serif; color: var(--green); font-size: 16px; }
+  .badge span { font-size: 14px; color: #55635c; }
+
+  /* Impact stats */
+  .stats { background: var(--green); color: var(--cream); }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .stat { padding: 30px 24px; border-left: 1px solid rgba(250,246,238,.16); }
+  .stat:first-child { border-left: 0; }
+  .stat b { display: block; font-family: "Lora", serif; font-size: 38px; color: var(--yellow); line-height: 1.1; }
+  .stat span { font-size: 15px; opacity: .9; }
+
+  /* Programs */
+  .programs { padding: 72px 0 88px; }
+  .programs h2 { font-size: 40px; text-align: center; }
+  .programs .sub { text-align: center; color: #55635c; font-size: 18px; margin: 12px 0 40px; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .card { background: #fff; border-radius: 22px; overflow: hidden; box-shadow: 0 6px 24px rgba(31,77,58,.08); }
+  .card img { display: block; width: 100%; aspect-ratio: 3/2; object-fit: cover; }
+  .card div { padding: 22px 24px 26px; }
+  .card h3 { font-size: 23px; }
+  .card p { color: #55635c; line-height: 1.55; margin: 8px 0 14px; }
+  .card a { color: var(--terracotta); font-weight: 700; }
+
+  /* Mobile */
+  @media (max-width: 760px) {
+    .wrap { padding: 0 20px; }
+    .topbar { font-size: 12px; padding: 9px 10px; letter-spacing: -.01em; white-space: nowrap; }
+    .nav { height: 64px; }
+    .links { display: none; }
+    .logo-mark { width: 36px; height: 36px; }
+    .logo-text { font-size: 17px; }
+    .mobile-only { display: flex; align-items: center; gap: 10px; }
+    .burger { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; border: 1.5px solid #d9ceb7; }
+    .hero { padding: 28px 0 40px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 28px; }
+    .eyebrow { margin-bottom: 12px; font-size: 12px; }
+    .hero h1 { font-size: 37px; }
+    .hero p { font-size: 17px; margin: 16px 0 22px; }
+    .actions { flex-direction: column; }
+    .actions .btn { width: 100%; padding: 15px; }
+    .photo img { aspect-ratio: 4/3; border-radius: 22px 22px 22px 70px; }
+    .photo::before { display: none; }
+    .badge { left: 12px; bottom: 12px; padding: 10px 14px; }
+    .badge b { font-size: 15px; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .stat { padding: 20px 16px; }
+    .stat:nth-child(3) { border-left: 0; }
+    .stat b { font-size: 30px; }
+    .cards { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <strong>Winter Coat Drive:</strong> drop-offs open through Dec 20 · <a href="#">Learn more</a>
+  </div>
+
+  <header>
+    <div class="wrap nav">
+      <a class="logo" href="#">
+        <span class="logo-mark" aria-hidden="true">
+          <!-- Two hands holding a heart -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f2b134" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9.5c-1-2-4.5-2-4.5.8 0 2.2 4.5 4.7 4.5 4.7s4.5-2.5 4.5-4.7c0-2.8-3.5-2.8-4.5-.8z" fill="#f2b134"/><path d="M3 14l4 4h6M21 14l-4 4h-4"/></svg>
+        </span>
+        <span class="logo-text">Common Ground<small>Community Center</small></span>
+      </a>
+      <nav class="links">
+        <a href="#">About</a><a href="#">Programs</a><a href="#">Events</a><a href="#">Volunteer</a><a href="#">News</a>
+        <a class="btn btn-yellow btn-sm" href="#">Donate</a>
+      </nav>
+      <span class="nav-right mobile-only">
+        <a class="btn btn-yellow btn-sm mobile-donate" href="#">Donate</a>
+        <span class="burger" aria-label="Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1f4d3a" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </span>
+      </span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="eyebrow">Central New York</span>
+          <h1>A warm place for <em>everyone</em> in our neighborhood.</h1>
+          <p>Free meals, after-school programs and support for families. Powered by 350 volunteers and people like you.</p>
+          <div class="actions">
+            <a class="btn btn-green" href="#">Donate now
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#f2b134"><path d="M12 21s-7.5-4.6-9.4-9.2C1.2 8.4 3.4 5 6.8 5c2 0 3.4 1.1 4.2 2.4C11.8 6.1 13.2 5 15.2 5c3.4 0 5.6 3.4 4.2 6.8C17.5 16.4 12 21 12 21z"/></svg>
+            </a>
+            <a class="btn btn-outline" href="#">Volunteer with us</a>
+          </div>
+        </div>
+        <div class="photo">
+          <img src="photos/hero-community-meal.jpg" alt="Volunteers serving a community meal">
+          <div class="badge">
+            <span class="badge-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d9734e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18M5 11a7 7 0 0 1 14 0M4 15h16l-1.5 4h-13z"/></svg>
+            </span>
+            <span><b>Community Dinner</b><span>Every Thursday · 5:30 PM</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="wrap stats-grid">
+        <div class="stat"><b>12,400</b><span>meals served this year</span></div>
+        <div class="stat"><b>350+</b><span>active volunteers</span></div>
+        <div class="stat"><b>40</b><span>free programs</span></div>
+        <div class="stat"><b>1,200</b><span>families supported</span></div>
+      </div>
+    </section>
+
+    <section class="programs">
+      <div class="wrap">
+        <h2>How we help</h2>
+        <p class="sub">Programs for every age, open to every neighbor.</p>
+        <div class="cards">
+          <article class="card">
+            <img src="photos/food-pantry.jpg" alt="Volunteers packing groceries">
+            <div><h3>Food Pantry</h3><p>Fresh produce and groceries for families, three days a week. No paperwork needed.</p><a href="#">Get help →</a></div>
+          </article>
+          <article class="card">
+            <img src="photos/youth-programs.jpg" alt="Children doing homework together">
+            <div><h3>Youth Programs</h3><p>After-school homework help, reading circles and summer camp for kids ages 6–14.</p><a href="#">Learn more →</a></div>
+          </article>
+          <article class="card">
+            <img src="photos/senior-services.jpg" alt="Volunteers visiting with an older neighbor">
+            <div><h3>Senior Services</h3><p>Home visits, rides to appointments and a weekly coffee morning for older neighbors.</p><a href="#">Learn more →</a></div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

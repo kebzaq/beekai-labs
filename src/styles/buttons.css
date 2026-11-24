@@ -14,6 +14,11 @@
   @apply bg-accent text-dark hover:bg-accent-hover;
 }
 
+/* White button that turns orange on hover and keyboard focus (homepage hero) */
+@utility btn-light-accent {
+  @apply text-theme-darker hover:bg-accent hover:text-dark focus-visible:bg-accent focus-visible:text-dark bg-white transition-colors duration-200 focus-visible:outline-white motion-reduce:transition-none;
+}
+
 @utility btn-outline {
   @apply border-dark text-dark border bg-transparent;
 }

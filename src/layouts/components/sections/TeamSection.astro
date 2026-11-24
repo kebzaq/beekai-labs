@@ -1,4 +1,5 @@
 ---
+import { ready } from "@/lib/utils/todo";
 import type { z } from "astro/zod";
 import Icons from "@/helpers/Icons.astro";
 import { getSectionContent } from "@/lib/contentParser.astro";
@@ -58,7 +59,9 @@ if (!enable || list.length === 0) {
                   {member.role}
                 </p>
               )}
-              {member.bio && <p set:html={markdownify(member.bio)} />}
+              {ready(member.bio) && (
+                <p set:html={markdownify(member.bio as string)} />
+              )}
               {member.focus && (
                 <p class="text-sm">
                   {focusLabel && (

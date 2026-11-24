@@ -1,0 +1,68 @@
+---
+/**
+ * A desktop screenshot in a browser frame, with an optional phone frame
+ * overlapping its bottom corner. Images live in src/assets/images.
+ * Inside an element with the `group` class, the screenshots zoom in slightly on hover.
+ */
+import OptimizedImage from "@/components/utilities/OptimizedImage.astro";
+
+interface Props {
+  desktop: string;
+  mobile?: string;
+  desktopAlt: string;
+  mobileAlt?: string;
+  size?: "default" | "large";
+  class?: string;
+}
+
+const {
+  desktop,
+  mobile,
+  desktopAlt,
+  mobileAlt = "",
+  size = "default",
+  class: className,
+} = Astro.props;
+
+const isLarge = size === "large";
+const zoom = "transition duration-500 group-hover:scale-105 motion-reduce:transition-none";
+---
+
+<div class:list={["relative", mobile && "pe-6 sm:pe-10", className]}>
+  <div
+    class="overflow-hidden rounded-lg border border-white/10 bg-white shadow-xl shadow-black/40">
+    <div class="bg-theme-dark flex gap-1.5 px-3 py-2.5" aria-hidden="true">
+      <span class="size-2 rounded-full bg-white/30"></span>
+      <span class="size-2 rounded-full bg-white/30"></span>
+      <span class="size-2 rounded-full bg-white/30"></span>
+    </div>
+    <div class="overflow-hidden">
+      <OptimizedImage
+        src={desktop}
+        alt={desktopAlt}
+        width={isLarge ? 1200 : 720}
+        height={isLarge ? 750 : 450}
+        loading="lazy"
+        class:list={["aspect-16/10 w-full object-cover object-top", zoom]}
+      />
+    </div>
+  </div>
+  {
+    mobile && (
+      <div
+        class:list={[
+          "border-theme-dark bg-theme-dark absolute end-0 -bottom-4 overflow-hidden rounded-xl border-4 shadow-xl shadow-black/50",
+          isLarge ? "w-1/5" : "w-1/4",
+        ]}>
+        <OptimizedImage
+          src={mobile}
+          alt={mobileAlt}
+          width={isLarge ? 300 : 200}
+          height={isLarge ? 650 : 433}
+          loading="lazy"
+          class:list={["aspect-9/19 w-full object-cover object-top", zoom]}
+        />
+      </div>
+    )
+  }
+</div>

@@ -1,0 +1,20 @@
+Northside Heating & Air: portfolio cover image
+==============================================
+Scene photo (scene-original.jpg, 5760x3840), free under the Pexels License
+(https://www.pexels.com/license/): free for commercial use, no attribution required.
+
+- "Laptop and a Smartphone Displaying a Blank White Screen Standing on a Desk"
+  by Katrin Bolovtsova (Ekaterina Bolovtsova)
+  https://www.pexels.com/photo/laptop-and-a-smartphone-displaying-a-blank-white-screen-standing-on-a-desk-6372904/
+  Photographer: https://www.pexels.com/@ekaterina-bolovtsova/
+  Edit: the model name printed on the laptop's bottom bezel is painted out in compose.py.
+
+Demo website photos (site.html uses the homepage hero mockup's images in
+src/assets/hero-mockup/), free under the Unsplash License (https://unsplash.com/license):
+- hero-technician.webp: Joel Muniz, https://unsplash.com/photos/technician-servicing-outdoor-air-conditioning-unit-L5sEqpQukJI
+- service-furnace-repair.webp: Immo Wegmann, https://unsplash.com/photos/a-room-with-a-bunch-of-pipes-and-gauges-2nsQWyPU6tw
+- service-ac-installation.webp: alpha innotec, https://unsplash.com/photos/outdoor-heat-pump-unit-next-to-a-brick-building-4VCm8l6wLQY
+- service-maintenance-plans.webp: HUUM, https://unsplash.com/photos/finger-adjusting-a-modern-digital-thermostat-on-wall-3_nf1qKJGf4
+
+"Northside Heating & Air" is a sample business; the phone number is a 555 number.
+Font: Inter from Google Fonts (SIL Open Font License).

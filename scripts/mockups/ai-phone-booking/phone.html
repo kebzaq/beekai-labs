@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Messages · Autumn's Nail Spa</title>
+<!-- Demo text conversation for the AI Phone Booking Assistant cover. Not part of the site build.
+     A generic iOS-like look: system font, grey incoming bubbles, no Apple logos. -->
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { font-family: -apple-system, "SF Pro Text", system-ui, "Helvetica Neue", Arial, sans-serif; background: #fff; color: #111; display: flex; flex-direction: column; -webkit-font-smoothing: antialiased; }
+
+  .status { height: 54px; display: flex; align-items: center; justify-content: space-between; padding: 6px 30px 0 40px; font-weight: 600; font-size: 17px; }
+  .status .icons { display: flex; align-items: center; gap: 6px; }
+
+  .header { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 4px 0 12px; border-bottom: 1px solid #e6e6e9; background: #f7f7f8; position: relative; }
+  .back { position: absolute; left: 14px; top: 18px; color: #0a7aff; font-size: 30px; line-height: 1; }
+  .avatar { width: 54px; height: 54px; border-radius: 50%; background: #8e1b2e; color: #fbf6ef; display: grid; place-items: center; font-family: Georgia, serif; font-weight: 700; font-size: 20px; letter-spacing: .02em; }
+  .name { font-size: 13px; color: #222; display: flex; align-items: center; gap: 3px; }
+  .name::after { content: "›"; color: #999; font-size: 15px; }
+
+  .thread { flex: 1; padding: 14px 14px 0; display: flex; flex-direction: column; gap: 6px; }
+  .meta { text-align: center; font-size: 12px; color: #8a8a8e; margin: 6px 0 10px; }
+  .meta b { font-weight: 600; }
+  .bubble { max-width: 80%; padding: 10px 15px; border-radius: 20px; font-size: 18px; line-height: 1.32; }
+  .in { align-self: flex-start; background: #e9e9eb; border-bottom-left-radius: 6px; }
+  .out { align-self: flex-end; background: #0a7aff; color: #fff; border-bottom-right-radius: 6px; }
+  .in a { color: #0a63d6; text-decoration: underline; }
+  .card { align-self: flex-start; width: 80%; border-radius: 18px; overflow: hidden; background: #e9e9eb; }
+  .card .img { height: 112px; background: linear-gradient(135deg, #8e1b2e, #c2485b 60%, #f2c6b8); display: grid; place-items: center; color: #fbf6ef; font-family: Georgia, serif; font-size: 22px; font-weight: 700; text-align: center; line-height: 1.15; }
+  .card .img small { display: block; font-family: -apple-system, system-ui, sans-serif; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; opacity: .85; margin-top: 4px; }
+  .card .txt { padding: 9px 14px 11px; font-size: 14px; }
+  .card .txt b { display: block; font-size: 15px; }
+  .card .txt span { color: #6d6d72; }
+  .confirm { border-left: 0; }
+  .confirm b { color: #1d8a4a; }
+  .delivered { align-self: flex-end; font-size: 12px; color: #8a8a8e; margin: -2px 4px 4px; }
+
+  .composer { display: flex; align-items: center; gap: 10px; padding: 10px 12px 34px; }
+  .plus { width: 36px; height: 36px; border-radius: 50%; background: #eeeef0; display: grid; place-items: center; color: #888; font-size: 24px; }
+  .field { flex: 1; height: 38px; border: 1px solid #d6d6da; border-radius: 19px; padding: 0 14px; display: flex; align-items: center; color: #b0b0b5; font-size: 16px; }
+</style>
+</head>
+<body>
+  <div class="status">
+    <span>9:41</span>
+    <span class="icons" aria-hidden="true">
+      <svg width="19" height="12" viewBox="0 0 19 12"><rect x="0" y="8" width="3.2" height="4" rx="1" fill="#111"/><rect x="5" y="5.5" width="3.2" height="6.5" rx="1" fill="#111"/><rect x="10" y="3" width="3.2" height="9" rx="1" fill="#111"/><rect x="15" y="0" width="3.2" height="12" rx="1" fill="#111"/></svg>
+      <svg width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 2.4c2.4 0 4.6.9 6.3 2.5l1.2-1.3A10.6 10.6 0 0 0 8.5.6 10.6 10.6 0 0 0 1 3.6l1.2 1.3a9 9 0 0 1 6.3-2.5zm0 3.6c1.4 0 2.7.5 3.7 1.4l1.2-1.3a7.2 7.2 0 0 0-9.8 0l1.2 1.3c1-.9 2.3-1.4 3.7-1.4zm0 3.5 2-2.1a3 3 0 0 0-4 0z" fill="#111"/></svg>
+      <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#111" opacity=".4"/><rect x="2.2" y="2.2" width="19.6" height="8.6" rx="2" fill="#111"/><path d="M25 4.5v4a2 2 0 0 0 0-4z" fill="#111" opacity=".4"/></svg>
+    </span>
+  </div>
+
+  <div class="header">
+    <span class="back">‹</span>
+    <span class="avatar">AN</span>
+    <span class="name">Autumn's Nail Spa</span>
+  </div>
+
+  <div class="thread">
+    <div class="meta"><b>Text Message</b><br>Today 2:16 PM</div>
+    <div class="bubble in">Thanks for calling Autumn's Nail Spa! 💅 Book your appointment here:</div>
+    <div class="card">
+      <div class="img">Autumn's Nail Spa<small>Book online</small></div>
+      <div class="txt"><b>Book an appointment</b><span>Choose a service, technician &amp; time</span></div>
+    </div>
+    <div class="bubble out">Perfect, thank you!</div>
+    <div class="delivered">Delivered</div>
+    <div class="meta">Today 2:21 PM</div>
+    <div class="bubble in confirm"><b>✓ Booking confirmed:</b> Gel manicure, Thu 3:00 PM with Linh.</div>
+  </div>
+
+  <div class="composer">
+    <span class="plus">+</span>
+    <span class="field">Text Message</span>
+  </div>
+</body>
+</html>

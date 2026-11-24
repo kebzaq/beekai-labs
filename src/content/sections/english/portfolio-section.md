@@ -9,6 +9,7 @@ options:
   featuredOnly: true # true: only projects with `featured: true`
   limit: 3 # Maximum number of projects, or false for no limit
   grouped: false # true: under "All", show projects under a heading per category
+  highlightFirst: true # true: the first project (lowest `weight`) gets a large card spanning two columns
 
 button:
   # Refer to sharedButton in src/sections.schema.ts for all options.

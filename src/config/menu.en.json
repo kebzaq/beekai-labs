@@ -2,6 +2,11 @@
   "headerPrimary": [
     {
       "enable": true,
+      "name": "Home",
+      "url": "/"
+    },
+    {
+      "enable": true,
       "name": "Services",
       "url": "/services/",
       "hasChildren": true,
@@ -22,7 +27,8 @@
       "url": "/about/"
     },
     {
-      "enable": true,
+      "enable": false,
+      "enableComment": "Blog link hidden from the navbar for now. Set enable to true to show it again.",
       "name": "Blog",
       "url": "/blog/"
     }

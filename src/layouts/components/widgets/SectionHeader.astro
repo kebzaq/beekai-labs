@@ -2,6 +2,7 @@
 import { markdownify } from "@/lib/utils/textConverter";
 
 interface Props {
+  eyebrow?: string;
   title?: string;
   description?: string;
   appearance?: "light" | "dark";
@@ -10,6 +11,7 @@ interface Props {
 }
 
 const {
+  eyebrow,
   title,
   description,
   appearance = "light",
@@ -18,28 +20,49 @@ const {
 } = Astro.props;
 
 const isCentered = align === "center";
+const isDark = appearance === "dark";
 ---
 
 {
-  (title || description) && (
+  (eyebrow || title || description) && (
     <div
+      data-reveal
       class:list={[
         "space-y-5",
         isCentered && "mx-auto max-w-3xl text-center",
         className,
       ]}>
+      {eyebrow && (
+        <p
+          class:list={[
+            "font-secondary flex items-center gap-2 text-sm font-semibold tracking-widest uppercase",
+            isCentered && "justify-center",
+            isDark ? "text-accent-light" : "text-dark",
+          ]}>
+          <svg
+            viewBox="0 0 100 115.47"
+            class="fill-accent size-3 shrink-0"
+            aria-hidden="true">
+            <polygon points="50,0 100,28.87 100,86.6 50,115.47 0,86.6 0,28.87" />
+          </svg>
+          {eyebrow}
+        </p>
+      )}
       {title && (
         <h2
           class:list={[
-            "section-title",
-            isCentered && "section-title-center",
-            appearance === "dark" && "text-light",
+            !eyebrow && "section-title",
+            !eyebrow && isCentered && "section-title-center",
+            isDark && "text-light",
           ]}
           set:html={markdownify(title)}
         />
       )}
       {description && (
-        <p class="text-lg opacity-80" set:html={markdownify(description)} />
+        <p
+          class:list={["text-lg opacity-80", isDark && "text-light"]}
+          set:html={markdownify(description)}
+        />
       )}
     </div>
   )

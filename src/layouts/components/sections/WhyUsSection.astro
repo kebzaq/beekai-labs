@@ -5,6 +5,7 @@ import { getWhyUsItems } from "@/lib/utils/siteData";
 import type { whyUsSectionSchema } from "@/sections.schema";
 import FeatureCard from "@/components/cards/FeatureCard.astro";
 import SectionHeader from "@/components/widgets/SectionHeader.astro";
+import FounderCard from "@/components/widgets/FounderCard.astro";
 
 type WhyUsContent = NonNullable<z.infer<typeof whyUsSectionSchema>>;
 
@@ -14,16 +15,20 @@ type Props = {
 
 const {
   enable = true,
+  eyebrow,
   title,
   description,
+  limit,
+  founder,
 } = await getSectionContent<WhyUsContent>(
   "why-us-section",
   Astro.props.content,
   Astro.currentLocale,
 );
 
-// Items come from src/content/data/why-us.yml
-const items = await getWhyUsItems();
+// Items come from src/content/data/why-us.yml, in `order`. `limit` keeps the first few.
+const allItems = await getWhyUsItems();
+const items = limit ? allItems.slice(0, limit) : allItems;
 
 if (!enable) {
   return null;
@@ -33,16 +38,22 @@ if (!enable) {
 <section id="why-us">
   <div class="bg-theme-darker relative overflow-hidden py-20 md:py-32">
     <div class="accent-glow -top-72" aria-hidden="true"></div>
-    <div class="relative container space-y-14">
-      <SectionHeader
-        title={title}
-        description={description}
-        appearance="dark"
-      />
-      <ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+    <div
+      class="relative container grid grid-cols-1 gap-x-16 gap-y-12 lg:grid-cols-5">
+      <div class="space-y-10 lg:col-span-2">
+        <SectionHeader
+          eyebrow={eyebrow}
+          title={title}
+          description={description}
+          appearance="dark"
+          align="left"
+        />
+        {founder?.enable !== false && founder?.text && <FounderCard {...founder} />}
+      </div>
+      <ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:col-span-3">
         {
           items.map((item) => (
-            <li>
+            <li data-reveal>
               <FeatureCard
                 appearance="dark"
                 icon={item.data.icon}

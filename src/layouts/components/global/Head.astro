@@ -11,6 +11,10 @@ import fontsJson from "@/config/fonts.json";
 
 <head>
   <meta charset="UTF-8" />
+  <!-- Scroll-in animations only run when JavaScript is available (see GlobalScripts) -->
+  <script is:inline>
+    document.documentElement.classList.add("js-reveal");
+  </script>
   <meta http-equiv="Content-Language" content={Astro.currentLocale} />
   <meta
     name="viewport"

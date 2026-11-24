@@ -4,7 +4,7 @@ import { getSectionContent } from "@/lib/contentParser.astro";
 import { markdownify } from "@/lib/utils/textConverter";
 import CustomButton from "@/components/CustomButton.astro";
 import type { bannerAgencySectionSchema } from "@/sections.schema";
-import OptimizedImage from "@/components/utilities/OptimizedImage.astro";
+import HeroMockup from "@/components/widgets/HeroMockup.astro";
 
 // Type for this section data
 type BannerContent = NonNullable<z.infer<typeof bannerAgencySectionSchema>>;
@@ -18,6 +18,7 @@ const {
   enable = true,
   title,
   image,
+  mockup,
   titleSize,
   description,
   button,
@@ -33,7 +34,7 @@ const {
 const fontSizeMap: Record<NonNullable<typeof titleSize>, string> = {
   "display-1": "text-display-3 lg:text-display-2 xl:text-display-1",
   "display-2": "text-display-5 md:text-display-3 xl:text-display-2",
-  "display-3": "text-display-6 md:text-display-5 xl:text-display-4",
+  "display-3": "text-display-6 md:text-display-5 xl:text-display-4-sm",
 };
 
 const fontSize = titleSize ? fontSizeMap[titleSize] : fontSizeMap["display-1"];
@@ -44,76 +45,69 @@ if (!enable) {
 ---
 
 <section
-  class:list={[
-    "text-light relative overflow-hidden bg-theme-darker pt-44 md:pt-52",
-    image ? "mb-24 md:mb-32" : "pb-24 md:pb-32",
-  ]}>
+  class="text-light bg-theme-darker relative overflow-hidden pt-36 pb-24 md:pt-44 md:pb-32">
+  <div class="honeycomb-pattern" aria-hidden="true"></div>
   <div class="accent-glow -bottom-72" aria-hidden="true"></div>
   <div class="relative container">
-    <div class="mx-auto max-w-5xl space-y-7 text-center md:space-y-10">
-      {
-        title && (
-          <h1
-            data-aos="reveal-anim-top"
-            data-aos-duration="1500"
-            class:list={[fontSize, "font-bold text-inherit"]}
-            set:html={markdownify(title)}
-          />
-        )
-      }
+    <div
+      class="grid grid-cols-1 items-center gap-x-12 gap-y-16 lg:grid-cols-11 xl:gap-x-16">
+      <!-- Text: centered on small screens, right-aligned toward the mockup from lg -->
       <div
-        data-aos="reveal-anim-top"
-        data-aos-duration="1500"
-        data-aos-delay="200"
-        class="mx-auto max-w-2xl space-y-8">
+        class="space-y-7 text-center md:space-y-8 lg:col-span-6 lg:text-end">
         {
-          description && (
-            <p
-              class="text-lg text-inherit opacity-80"
-              set:html={markdownify(description)}
+          title && (
+            <h1
+              data-aos="reveal-anim-top"
+              data-aos-duration="1500"
+              class:list={[fontSize, "font-bold text-inherit"]}
+              set:html={markdownify(title)}
             />
           )
         }
-        {
-          (button?.enable || secondaryButton?.enable) && (
-            <div class="flex flex-wrap items-center justify-center gap-4">
-              {button?.enable && (
-                <CustomButton
-                  hoverEffect="creative-fill"
-                  class="btn-accent effect-color-light"
-                  {...button}
-                />
-              )}
-              {secondaryButton?.enable && (
-                <CustomButton
-                  hoverEffect="creative-fill"
-                  class="btn-outline-light effect-color-accent"
-                  {...secondaryButton}
-                />
-              )}
-            </div>
-          )
-        }
-        {note && <p class="text-sm opacity-70" set:html={markdownify(note)} />}
+        <div
+          data-aos="reveal-anim-top"
+          data-aos-duration="1500"
+          data-aos-delay="200"
+          class="mx-auto max-w-2xl space-y-8 lg:me-0">
+          {
+            description && (
+              <p
+                class="text-lg text-inherit opacity-80"
+                set:html={markdownify(description)}
+              />
+            )
+          }
+          {
+            (button?.enable || secondaryButton?.enable) && (
+              <div class="flex flex-wrap items-center justify-center gap-4 lg:justify-end">
+                {button?.enable && (
+                  <CustomButton class="btn-light-accent" {...button} />
+                )}
+                {secondaryButton?.enable && (
+                  <CustomButton
+                    hoverEffect="creative-fill"
+                    class="btn-outline-light effect-color-accent"
+                    {...secondaryButton}
+                  />
+                )}
+              </div>
+            )
+          }
+          {
+            note && (
+              <p class="text-sm opacity-70" set:html={markdownify(note)} />
+            )
+          }
+        </div>
       </div>
 
-      {
-        image && (
-          <div
-            data-aos="reveal-anim-top"
-            data-aos-duration="1500"
-            data-aos-delay="300"
-            data-aos-offset="0"
-            class="mx-auto mt-10 -mb-24 max-w-4xl md:mt-20 md:-mb-32">
-            <OptimizedImage
-              src={image}
-              alt=""
-              loading="eager"
-              class="h-110 w-full object-cover md:h-135"
-            />
-          </div>
-        )
-      }
+      <!-- Visual: below the text on small screens, on the right from lg.
+           From md it is laid out at 420px / 520px and shown at 88% (hero-visual-zoom). -->
+      <HeroMockup
+        image={image}
+        {...mockup}
+        class="hero-visual-zoom mx-auto w-full max-w-sm md:w-105 md:max-w-none lg:col-span-5 lg:w-130"
+      />
     </div>
   </div>
 </section>

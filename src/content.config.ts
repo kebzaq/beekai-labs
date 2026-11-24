@@ -141,6 +141,8 @@ const toolsCollection = defineCollection({
   schema: z.object({
     order: z.number(),
     name: z.string(),
+    logo: z.string().optional(), // SVG in src/assets/images/logos
+    color: z.string().optional(), // Brand color on hover
   }),
 });
 
@@ -175,6 +177,9 @@ const portfolioCollection = defineCollection({
     liveUrl: z.url().optional(),
     coverImage: z.string().optional(), // Desktop screenshot
     mobileImage: z.string().optional(), // Mobile screenshot
+    cover: z.string().optional(), // Photo cover for cards, e.g. "/work/<project>/cover.png" (in src/assets). Falls back to the screenshots.
+    coverPosition: z.string().optional(), // Which part of the cover stays visible when cropped (CSS object-position), e.g. "80% center"
+    coverAlt: z.string().optional(), // Alt text for the cover. Default: "<title> website shown on a laptop and phone"
     icon: z.string().optional(), // Lucide icon shown when there is no screenshot
     gallery: z.array(z.string()).default([]),
     status: z.enum(["Live", "Concept", "In progress"]),

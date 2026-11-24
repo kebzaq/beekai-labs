@@ -1,0 +1,13 @@
+AI Phone Booking Assistant: portfolio cover image
+=================================================
+Scene photo (scene-original.jpg, 6000x4000), free under the Pexels License
+(https://www.pexels.com/license/): free for commercial use, no attribution required.
+
+- "Smartphone and a Laptop With Blank Screens" by Leonid Altman
+  https://www.pexels.com/photo/smartphone-and-a-laptop-with-blank-screens-12882824/
+  Photographer: https://www.pexels.com/@altman/
+
+Screens (laptop.html, phone.html) are made for this mockup. The salon, callers and phone
+numbers are sample data (555 numbers). No brand logos are shown.
+Fonts: Cormorant Garamond and DM Sans from Google Fonts (SIL Open Font License); the phone
+screen uses the system font.

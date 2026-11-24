@@ -16,6 +16,7 @@ const {
   title,
   description,
   button,
+  note,
 } = await getSectionContent<CtaContent>(
   "call-to-action",
   Astro.props.content,
@@ -31,7 +32,7 @@ if (!enable) {
   <div
     class="bg-theme-darker text-light relative overflow-hidden border-b border-white/15 py-20 md:py-28">
     <div class="accent-glow -bottom-72" aria-hidden="true"></div>
-    <div class="relative container space-y-8 text-center">
+    <div class="relative container space-y-8 text-center" data-reveal>
       {
         title && (
           <h2
@@ -49,12 +50,19 @@ if (!enable) {
         )
       }
       {
-        button?.enable && (
-          <CustomButton
-            hoverEffect="creative-fill"
-            class="btn-accent effect-color-light"
-            {...button}
-          />
+        (button?.enable || note) && (
+          <div class="space-y-4">
+            {button?.enable && (
+              <CustomButton
+                hoverEffect="creative-fill"
+                class="btn-accent effect-color-light"
+                {...button}
+              />
+            )}
+            {note && (
+              <p class="text-sm opacity-80" set:html={markdownify(note)} />
+            )}
+          </div>
         )
       }
     </div>

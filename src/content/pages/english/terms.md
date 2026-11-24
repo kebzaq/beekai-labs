@@ -5,7 +5,7 @@ categories: []
 draft: false
 ---
 
-**[TODO: review] This page is a placeholder. Replace it with reviewed terms before launch.**
+<!-- TODO: review. This page is a placeholder. Replace it with reviewed terms before launch. -->
 
 ### What this page will cover
 

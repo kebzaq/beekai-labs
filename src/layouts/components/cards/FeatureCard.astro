@@ -32,8 +32,10 @@ const isDark = appearance === "dark";
 
 <div
   class:list={[
-    "hover:border-accent flex h-full flex-col gap-4 border p-8 transition duration-300",
-    isDark ? "text-light border-white/15" : "border-border-light bg-white",
+    "flex h-full flex-col gap-4 p-8",
+    isDark
+      ? "text-light hover:border-accent border border-white/15 transition duration-300"
+      : "card-soft",
     className,
   ]}>
   {

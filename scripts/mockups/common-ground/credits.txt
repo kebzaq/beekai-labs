@@ -1,0 +1,22 @@
+Common Ground Community Center: portfolio cover image
+=====================================================
+All photos are free to use under the Pexels License (https://www.pexels.com/license/):
+free for commercial use, no attribution required. Credited here anyway.
+
+Scene photo (scene-original.jpg, 5760x3840)
+- "Open Laptop Lying on a Wooden Shelf" by Katrin Bolovtsova (Ekaterina Bolovtsova)
+  https://www.pexels.com/photo/open-laptop-lying-on-a-wooden-shelf-6372925/
+  Photographer: https://www.pexels.com/@ekaterina-bolovtsova/
+  Edit: the model name printed on the laptop's bottom bezel is painted out in compose.py.
+
+Demo website photos (photos/)
+- hero-community-meal.jpg: "Woman Handing Out Bread" by eden-fc
+  https://www.pexels.com/photo/woman-handing-out-bread-20859638/
+- food-pantry.jpg: "Volunteers Packing Donations in the Room" by cottonbro studio
+  https://www.pexels.com/photo/volunteers-packing-donations-in-the-room-6591154/
+- youth-programs.jpg: "Crop Unrecognizable Diverse Pupils Sitting at Desk in Classroom" by Katerina Holmes
+  https://www.pexels.com/photo/crop-unrecognizable-diverse-pupils-sitting-at-desk-in-classroom-5905466/
+- senior-services.jpg: "Men Looking at a Photo Album Together" by RDNE Stock project
+  https://www.pexels.com/photo/men-looking-at-a-photo-album-together-6647025/
+
+Fonts: Lora and DM Sans from Google Fonts (SIL Open Font License).

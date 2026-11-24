@@ -19,6 +19,13 @@
   --color-theme-dark: #0e1118;
   --color-theme-darker: #262625; /* Main dark background: page heroes, header, footer, dark sections */
   --color-theme-light: #f6f5f3;
+  --color-card-soft: #faf8f5; /* Warm off-white for cards on light sections */
+
+  /* Sample client brand inside the homepage hero mockup (not BeeKai colors) */
+  --color-demo-page: #f7f9fc; /* Page background */
+  --color-demo-surface: #e8eef6; /* Section background */
+  --color-demo-ink: #1e3a5f; /* Header, headings and text */
+  --color-demo-accent: #e63946; /* Call and booking buttons */
   --color-text-default: #2e2e2e;
   --color-dark: #0a0c00;
   --color-light: #f6f5f3;
@@ -34,6 +41,8 @@
   --text-base: 1rem;
   --text-base-scale: 1.25;
   --text-base-sm: calc(var(--text-base) * 0.9);
+  --text-2xs: 0.6875rem; /* 11px: tiny UI text, e.g. inside the hero mockup */
+  --text-3xs: 0.625rem; /* 10px (shows as 8px in the hero mockup, which is zoomed to 80%) */
 
   --text-display-1: calc(var(--text-base) * pow(var(--text-base-scale), 8.8)); /* 115px  */
   --text-display-2: calc(var(--text-base) * pow(var(--text-base-scale), 8)); /* 95px  */
@@ -41,6 +50,7 @@
   --text-display-4: calc(var(--text-base) * pow(var(--text-base-scale), 6.5)); /* 65px  */
   --text-display-5: calc(var(--text-base) * pow(var(--text-base-scale), 5.5)); /* 50px  */
   --text-display-6: calc(var(--text-base) * pow(var(--text-base-scale), 4.5)); /* 40px  */
+  --text-display-4-sm: calc(var(--text-display-4) * 0.9); /* 58.5px: homepage hero headline on xl */
 
   --text-h1: calc(var(--text-base) * pow(var(--text-base-scale), 6));
   --text-h2: calc(var(--text-base) * pow(var(--text-base-scale), 5));
@@ -55,4 +65,32 @@
   --text-h4-sm: calc(var(--text-h4) * 0.9);
   --text-h5-sm: calc(var(--text-h5) * 0.9);
   --text-h6-sm: calc(var(--text-h6) * 0.9);
+}
+
+/* Motion tokens: use with `motion-reduce:animate-none` so they stop for visitors who prefer less motion */
+@theme {
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-float-delayed: float 8s ease-in-out -4s infinite;
+  --animate-glow: glow 6s ease-in-out infinite;
+  --animate-glow-delayed: glow 7s ease-in-out -3s infinite;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes glow {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.55;
+    }
+  }
 }

@@ -49,8 +49,9 @@ if (!src) {
 
 const normalizedSrc = src.startsWith("/src/assets") ? src : `/src/assets${src}`;
 
+// src/assets/images, plus per-project folders in src/assets/work (portfolio covers and screenshots)
 const images = import.meta.glob(
-  "/src/assets/images/**/*.{jpeg,jpg,png,webp,svg,gif}",
+  "/src/assets/{images,work}/**/*.{jpeg,jpg,png,webp,svg,gif}",
 );
 const rawSvgs = import.meta.glob("/src/assets/images/**/*.svg", {
   query: "raw",
